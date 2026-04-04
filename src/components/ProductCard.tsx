@@ -17,20 +17,28 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         return <Flame className="w-4 h-4 text-orange-500" />
       case 'amazon':
         return <ShoppingBag className="w-4 h-4 text-yellow-500" />
-      case 'mercadolivre':
+      case 'mercado_livre':
         return <Tag className="w-4 h-4 text-blue-500" />
       default:
         return null
     }
   }
 
+  const getStoreName = () => {
+    switch (product.store) {
+      case 'shopee': return 'Shopee'
+      case 'amazon': return 'Amazon'
+      case 'mercado_livre': return 'Mercado Livre'
+      default: return product.store
+    }
+  }
   const getStoreColor = () => {
     switch (product.store) {
       case 'shopee':
         return 'bg-orange-100 text-orange-700 border-orange-200'
       case 'amazon':
         return 'bg-yellow-100 text-yellow-700 border-yellow-200'
-      case 'mercadolivre':
+      case 'mercado_livre':
         return 'bg-blue-100 text-blue-700 border-blue-200'
       default:
         return 'bg-gray-100 text-gray-700 border-gray-200'
@@ -59,7 +67,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
         <div className="absolute top-3 right-3">
           <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-medium ${getStoreColor()}`}>
             {getStoreIcon()}
-            <span className="capitalize">{product.store}</span>
+            <span>{getStoreName()}</span>
           </div>
         </div>
 

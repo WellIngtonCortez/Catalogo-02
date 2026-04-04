@@ -21,7 +21,8 @@ export class ProductService {
     }
 
     if (store && store !== 'all') {
-      query = query.eq('store', store)
+      // Use store_type for better consistency with the new schema
+      query = query.or(`store.eq.${store},store_type.eq.${store}`)
     }
 
     if (search) {

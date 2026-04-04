@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { ProductService } from '../services/productService'
 import { AnalyticsService } from '../services/analyticsService'
 import { Product } from '../services/supabase'
-import { Star, ShoppingBag, ArrowLeft, ExternalLink } from 'lucide-react'
+import { Star, ShoppingBag, Flame, Tag, ArrowLeft, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function ProductDetail() {
@@ -54,13 +54,22 @@ export function ProductDetail() {
   const getStoreIcon = () => {
     switch (product?.store) {
       case 'shopee':
-        return <ShoppingBag className="w-5 h-5 text-orange-500" />
+        return <Flame className="w-5 h-5 text-orange-500" />
       case 'amazon':
         return <ShoppingBag className="w-5 h-5 text-yellow-500" />
-      case 'mercadolivre':
-        return <ShoppingBag className="w-5 h-5 text-blue-500" />
+      case 'mercado_livre':
+        return <Tag className="w-5 h-5 text-blue-500" />
       default:
         return null
+    }
+  }
+
+  const getStoreName = () => {
+    switch (product?.store) {
+      case 'shopee': return 'Shopee'
+      case 'amazon': return 'Amazon'
+      case 'mercado_livre': return 'Mercado Livre'
+      default: return product?.store || ''
     }
   }
 
@@ -70,7 +79,7 @@ export function ProductDetail() {
         return 'bg-orange-100 text-orange-700 border-orange-200'
       case 'amazon':
         return 'bg-yellow-100 text-yellow-700 border-yellow-200'
-      case 'mercadolivre':
+      case 'mercado_livre':
         return 'bg-blue-100 text-blue-700 border-blue-200'
       default:
         return 'bg-gray-100 text-gray-700 border-gray-200'
@@ -138,7 +147,7 @@ export function ProductDetail() {
                 <div className="flex items-center gap-2">
                   {getStoreIcon()}
                   <span className={`px-3 py-1 rounded-lg border text-sm font-medium ${getStoreColor()}`}>
-                    {product.store}
+                    {getStoreName()}
                   </span>
                 </div>
               </div>
@@ -224,7 +233,7 @@ export function ProductDetail() {
                   className="w-full bg-[#2563eb] text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
                   <ExternalLink className="w-5 h-5" />
-                  Comprar na {product.store === 'shopee' ? 'Shopee' : product.store === 'amazon' ? 'Amazon' : 'Mercado Livre'}
+                   Comprar na {getStoreName()}
                 </button>
 
                 <div className="text-center text-sm text-gray-500">
@@ -239,7 +248,7 @@ export function ProductDetail() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Loja:</span>
-                    <span className="font-medium text-[#374151] capitalize">{product.store}</span>
+                    <span className="font-medium text-[#374151]">{getStoreName()}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Categoria:</span>

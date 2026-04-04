@@ -62,12 +62,15 @@ export function AdminLogin() {
                 Email
               </label>
               <input
+                id="email"
+                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20 transition-all duration-200"
                 placeholder="admin@wellshop.com"
                 required
+                autoComplete="email"
               />
             </div>
 
@@ -77,12 +80,15 @@ export function AdminLogin() {
               </label>
               <div className="relative">
                 <input
+                  id="password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20 transition-all duration-200 pr-12"
                   placeholder="•••••••••"
                   required
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"

@@ -221,6 +221,15 @@ export function AdminPanel() {
     }
   }
 
+  const getStoreName = (store: string) => {
+    switch (store) {
+      case 'shopee': return 'Shopee'
+      case 'amazon': return 'Amazon'
+      case 'mercado_livre': return 'Mercado Livre'
+      default: return store
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
@@ -305,7 +314,7 @@ export function AdminPanel() {
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <LojaSelector
                 selectedStore={formData.store_type}
-                onStoreSelect={(store) => setFormData(prev => ({ ...prev, store_type: store }))}
+                onStoreSelect={(store) => setFormData(prev => ({ ...prev, store_type: store, store: store as any }))}
                 error={storeError}
               />
 
@@ -313,6 +322,8 @@ export function AdminPanel() {
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">Nome</label>
                   <input
+                    id="name"
+                    name="name"
                     type="text"
                     required
                     value={formData.name}
@@ -324,6 +335,8 @@ export function AdminPanel() {
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">Descrição</label>
                   <textarea
+                    id="description"
+                    name="description"
                     required
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -336,6 +349,8 @@ export function AdminPanel() {
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">Preço</label>
                     <input
+                      id="price"
+                      name="price"
                       type="number"
                       required
                       step="0.01"
@@ -348,6 +363,8 @@ export function AdminPanel() {
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">Preço Original</label>
                     <input
+                      id="original_price"
+                      name="original_price"
                       type="number"
                       step="0.01"
                       value={formData.original_price}
@@ -361,6 +378,8 @@ export function AdminPanel() {
                   <label className="block text-sm font-medium text-[#374151] mb-2">URL da Imagem</label>
                   <div className="flex gap-2">
                     <input
+                      id="image_url"
+                      name="image_url"
                       type="url"
                       required
                       value={formData.image_url}
@@ -384,6 +403,8 @@ export function AdminPanel() {
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">Link de Afiliado</label>
                   <input
+                    id="affiliate_link"
+                    name="affiliate_link"
                     type="url"
                     required
                     value={formData.affiliate_link}
@@ -395,6 +416,8 @@ export function AdminPanel() {
                 <div>
                   <label className="block text-sm font-medium text-[#374151] mb-2">Categoria</label>
                   <input
+                    id="category"
+                    name="category"
                     type="text"
                     required
                     value={formData.category}
@@ -407,6 +430,8 @@ export function AdminPanel() {
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">Avaliação</label>
                     <input
+                      id="rating"
+                      name="rating"
                       type="number"
                       step="0.1"
                       min="0"
@@ -420,6 +445,8 @@ export function AdminPanel() {
                   <div>
                     <label className="block text-sm font-medium text-[#374151] mb-2">Nº Avaliações</label>
                     <input
+                      id="rating_count"
+                      name="rating_count"
                       type="number"
                       min="0"
                       value={formData.rating_count}
@@ -509,8 +536,8 @@ export function AdminPanel() {
                       <h3 className="font-medium text-[#374151]">{product.name}</h3>
                       <p className="text-sm text-gray-600">R$ {product.price.toFixed(2)}</p>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs px-2 py-1 bg-gray-100 rounded-lg capitalize">
-                          {product.store}
+                        <span className="text-xs px-2 py-1 bg-gray-100 rounded-lg">
+                          {getStoreName(product.store)}
                         </span>
                         <span className="text-xs px-2 py-1 bg-gray-100 rounded-lg">
                           {product.category}

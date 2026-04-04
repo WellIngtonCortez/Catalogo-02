@@ -3,7 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ ERRO: Variáveis de ambiente do Supabase não encontradas! Verifique o painel da Vercel.')
+}
+
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co', 
+  supabaseKey || 'placeholder-key'
+)
 
 export interface Product {
   id: string
@@ -13,7 +20,8 @@ export interface Product {
   original_price?: number
   image_url: string
   affiliate_link: string
-  store: 'shopee' | 'amazon' | 'mercadolivre'
+  store: 'shopee' | 'amazon' | 'mercado_livre'
+  store_type: 'shopee' | 'amazon' | 'mercado_livre'
   category: string
   rating: number
   rating_count: number
