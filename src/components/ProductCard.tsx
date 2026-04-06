@@ -1,5 +1,9 @@
 import { Product } from '../services/supabase'
-import { Star, ShoppingBag, Flame, Tag } from 'lucide-react'
+import { Flame, MoreHorizontal } from 'lucide-react'
+import shopeeLogo from '../assets/shopee.png'
+import amazonLogo from '../assets/amazon.png'
+import mercadolivreLogo from '../assets/mercadolivre.png'
+import aliexpressLogo from '../assets/aliexpress.png'
 
 interface ProductCardProps {
   product: Product
@@ -11,108 +15,113 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
     : 0
 
-  const getStoreIcon = () => {
+  const getStoreLogo = () => {
     switch (product.store) {
-      case 'shopee':
-        return <Flame className="w-4 h-4 text-orange-500" />
-      case 'amazon':
-        return <ShoppingBag className="w-4 h-4 text-yellow-500" />
-      case 'mercado_livre':
-        return <Tag className="w-4 h-4 text-blue-500" />
-      default:
-        return null
+      case 'shopee': return shopeeLogo
+      case 'amazon': return amazonLogo
+      case 'mercado_livre': return mercadolivreLogo
+      case 'aliexpress': return aliexpressLogo
+      default: return shopeeLogo
     }
   }
 
-  const getStoreName = () => {
-    switch (product.store) {
-      case 'shopee': return 'Shopee'
-      case 'amazon': return 'Amazon'
-      case 'mercado_livre': return 'Mercado Livre'
-      default: return product.store
-    }
-  }
   const getStoreColor = () => {
     switch (product.store) {
-      case 'shopee':
-        return 'bg-orange-100 text-orange-700 border-orange-200'
-      case 'amazon':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200'
-      case 'mercado_livre':
-        return 'bg-blue-100 text-blue-700 border-blue-200'
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+      case 'shopee': return 'border-orange-100 hover:border-orange-500 shadow-orange-500/10'
+      case 'amazon': return 'border-yellow-100 hover:border-yellow-500 shadow-yellow-500/10'
+      case 'mercado_livre': return 'border-blue-100 hover:border-blue-500 shadow-blue-500/10'
+      default: return 'border-gray-100 hover:border-gray-500 shadow-gray-500/10'
     }
   }
 
   return (
     <div 
-      className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer overflow-hidden hover:scale-[1.02] transform"
+      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden flex flex-col h-full border border-gray-100"
       onClick={() => onClick?.(product)}
     >
+      {/* Image Container */}
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <img
           src={product.image_url}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
         
+        {/* Discount Badge - Top Right */}
         {discount > 0 && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-semibold">
-            -{discount}%
+          <div className="absolute top-0 right-0 z-20 bg-[#e11d48]/10 backdrop-blur-md text-[#e11d48] px-2 py-1 rounded-bl-xl text-[10px] md:text-xs font-black border-l border-b border-rose-100 shadow-sm">
+            {discount}% OFF
           </div>
         )}
 
-        <div className="absolute top-3 right-3">
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-medium ${getStoreColor()}`}>
-            {getStoreIcon()}
-            <span>{getStoreName()}</span>
-          </div>
+        {/* Store Logo - Top Left for separation */}
+        <div className="absolute top-2 left-2 z-20 pointer-events-none select-none transition-all duration-300">
+           <div className={`p-1 bg-white/95 backdrop-blur-md rounded-xl shadow-md border ${getStoreColor()} flex items-center justify-center w-10 h-10 md:w-12 md:h-12 overflow-hidden ring-2 ring-white/50`}>
+             <img src={getStoreLogo() || ''} alt={product.store} className="w-full h-full object-contain" />
+            </div>
         </div>
 
+        {/* Destaque Badge - Bottom Left */}
         {product.featured && (
-          <div className="absolute bottom-3 left-3 bg-[#2563eb] text-white px-2 py-1 rounded-lg text-xs font-semibold">
-            ⭐ Destaque
+          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1.5 bg-blue-600/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-full shadow-lg shadow-blue-600/20 border border-blue-400">
+             <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+             <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Destaque</span>
+          </div>
+        )}
+
+        {/* Flash Sale Badge - Bottom Right */}
+        {product.flash_sale && (
+          <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1.5 bg-orange-500/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-full shadow-lg shadow-orange-600/20 border border-orange-400">
+             <Flame className="w-3 h-3 fill-white" />
+             <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none">Oferta</span>
           </div>
         )}
       </div>
 
-      <div className="p-6">
-        <h3 className="font-semibold text-[#374151] text-lg mb-2 line-clamp-2 group-hover:text-[#2563eb] transition-colors">
+      {/* Content */}
+      <div className="p-3 md:p-4 flex flex-col flex-1 gap-1.5 md:gap-2">
+        {/* Featured / Indicado Badge from image */}
+        {product.featured && (
+          <div className="flex">
+            <span className="bg-[#e11d48] text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
+              Indicado
+            </span>
+          </div>
+        )}
+
+        {/* Title */}
+        <h3 className="text-[#374151] text-xs md:text-sm font-medium line-clamp-2 leading-snug min-h-[2.5rem] md:min-h-[2.8rem]">
           {product.name}
         </h3>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-            <span className="text-sm font-medium text-[#374151]">{product.rating}</span>
-          </div>
-          <span className="text-gray-400 text-sm">({product.rating_count})</span>
-        </div>
-
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-[#374151]">
-                R$ {product.price.toFixed(2)}
-              </span>
-              {product.original_price && product.original_price > product.price && (
-                <span className="text-sm text-gray-500 line-through">
-                  R$ {product.original_price.toFixed(2)}
+        {/* Price Section */}
+        <div className="mt-auto pt-1">
+          <div className="flex flex-col">
+             <div className="flex items-baseline gap-1">
+                <span className="text-sm md:text-lg font-bold text-[#e11d48]">
+                   R${product.price.toFixed(2).replace('.', ',')}
                 </span>
-              )}
-            </div>
+                <span className="text-[10px] md:text-xs text-gray-500 font-medium">no Pix</span>
+             </div>
+             
+             {product.original_price && product.original_price > product.price && (
+               <span className="text-[10px] text-gray-400 line-through -mt-1 hidden md:block">
+                 R$ {product.original_price.toFixed(2).replace('.', ',')}
+               </span>
+             )}
           </div>
         </div>
 
-        <button className="bg-[#2563eb] text-white px-6 py-3 rounded-2xl font-medium hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Ver Detalhes
-        </button>
+        {/* Bottom Info: Sold & More like image */}
+        <div className="flex items-center justify-between mt-1 pt-2 border-t border-gray-50">
+           <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
+             {product.rating_count} vendidos
+           </span>
+           <button className="text-gray-300 hover:text-gray-500 transition-colors p-1">
+             <MoreHorizontal className="w-4 h-4 md:w-5 h-5" />
+           </button>
+        </div>
       </div>
     </div>
   )

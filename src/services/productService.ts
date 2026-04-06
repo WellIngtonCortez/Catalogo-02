@@ -69,6 +69,20 @@ export class ProductService {
     return data || []
   }
 
+  static async getFlashSaleProducts(limit: number = 8): Promise<Product[]> {
+    // Tenta buscar produtos com flash_sale = true ou com maior desconto
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('active', true)
+      .or('flash_sale.eq.true,original_price.gt.price')
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) throw error
+    return data || []
+  }
+
   static async getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
       .from('products')

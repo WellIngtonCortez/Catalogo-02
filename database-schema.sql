@@ -12,6 +12,7 @@ create table if not exists public.products (
   rating numeric default 0 check (rating >= 0 and rating <= 5),
   rating_count integer default 0,
   featured boolean default false,
+  flash_sale boolean default false,
   active boolean default true,
   created_at timestamp with time zone default timezone('utc'::text, now())
 );

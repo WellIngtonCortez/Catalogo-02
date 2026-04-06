@@ -6,20 +6,26 @@ import { ProductCard } from './components/ProductCard'
 import { ProductDetail } from './pages/ProductDetail'
 import { AdminPanel } from './pages/AdminPanel'
 import { AdminLogin } from './pages/AdminLogin'
-import { Filter, Star, ShoppingBag, Flame, Tag, PackageSearch } from 'lucide-react'
+import { ShoppingBag, Flame, Tag, PackageSearch } from 'lucide-react'
 import { useDebounce } from './hooks/useDebounce'
 import { Product, Category } from './services/supabase'
 import logoWellshop from './assets/logo_wellshop.png'
+import shopeeLogo from './assets/shopee.png'
+import amazonLogo from './assets/amazon.png'
+import mercadolivreLogo from './assets/mercadolivre.png'
+import aliexpressLogo from './assets/aliexpress.png'
 
 // New Components
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
 import { FilterSection } from './components/FilterSection'
 import { Footer } from './components/Footer'
+import { FeaturedCarousel } from './components/FeaturedCarousel'
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [flashSaleProducts, setFlashSaleProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -35,6 +41,7 @@ function App() {
 
   useEffect(() => {
     loadFeaturedProducts()
+    loadFlashSaleProducts()
     loadCategories()
   }, [])
 
@@ -72,6 +79,15 @@ function App() {
     }
   }
 
+  const loadFlashSaleProducts = async () => {
+    try {
+      const flashSales = await ProductService.getFlashSaleProducts()
+      setFlashSaleProducts(flashSales)
+    } catch (error) {
+      console.error('Error loading flash sale products:', error)
+    }
+  }
+
   const loadCategories = async () => {
     try {
       const cats = await ProductService.getCategories()
@@ -92,26 +108,26 @@ function App() {
   }
 
   const stores = [
-    { id: 'all', name: 'Geral', icon: Filter },
-    { id: 'shopee', name: 'Shopee', icon: Flame },
-    { id: 'amazon', name: 'Amazon', icon: ShoppingBag },
-    { id: 'mercado_livre', name: 'M. Livre', icon: Tag },
+    { id: 'shopee', name: 'Shopee', icon: Flame, logo: shopeeLogo, scale: 1.1 },
+    { id: 'amazon', name: 'Amazon', icon: ShoppingBag, logo: amazonLogo, scale: 1.1 },
+    { id: 'mercado_livre', name: 'Mercado Livre', icon: Tag, logo: mercadolivreLogo, scale: 2.0 },
+    { id: 'aliexpress', name: 'AliExpress', icon: Tag, logo: aliexpressLogo, scale: 0.95 },
   ]
 
   return (
     <Routes>
       <Route path="/" element={
         <div className="min-h-screen bg-white">
-          <Header 
-            searchTerm={searchTerm} 
-            setSearchTerm={setSearchTerm} 
-            logo={logoWellshop} 
+          <Header
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            logo={logoWellshop}
           />
 
           <main className="animate-fade-in">
-            <Hero stores={stores} />
+            <Hero />
 
-            <FilterSection 
+            <FilterSection
               selectedStore={selectedStore}
               setSelectedStore={setSelectedStore}
               selectedCategory={selectedCategory}
@@ -122,33 +138,105 @@ function App() {
               stores={stores}
             />
 
-            {/* Featured Section */}
-            {featuredProducts.length > 0 && !debouncedSearch && selectedStore === 'all' && selectedCategory === 'all' && (
-              <section className="py-20 lg:py-28 bg-[#FAFAFA]/50 overflow-hidden">
-                <div className="container mx-auto px-6">
-                  <div className="flex flex-col gap-4 mb-16 relative">
-                    <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-1.5 h-12 bg-blue-600 rounded-full"></div>
-                    <div className="flex bg-blue-50 w-fit px-3 py-1 rounded-lg border border-blue-100 text-blue-600">
-                      <Star className="w-4 h-4 fill-blue-600 mr-2" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Destaques</span>
-                    </div>
-                    <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Produtos em Destaque</h2>
-                    <p className="text-gray-500 max-w-xl leading-relaxed text-lg">
-                      Nossa curadoria especial com os itens mais desejados da semana. Qualidade garantida com as melhores avaliações.
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {featuredProducts.map(product => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        onClick={handleProductClick}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </section>
+            {/* Featured and Flash Sale Section */}
+            {!debouncedSearch && selectedStore === 'all' && selectedCategory === 'all' && (
+              <FeaturedCarousel
+                products={[
+                  ...featuredProducts, 
+                  ...flashSaleProducts,
+                  // Mock products to fill the carousel
+                  {
+                    id: 'mock-1',
+                    name: 'Fone Bluetooth JBL Tune 510BT Pure Bass',
+                    description: 'Fone de ouvido com som Pure Bass e até 40 horas de bateria.',
+                    price: 249.90,
+                    original_price: 399.90,
+                    image_url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
+                    affiliate_link: '#',
+                    store: 'shopee',
+                    store_type: 'shopee',
+                    category: 'Eletrônicos',
+                    rating: 4.8,
+                    rating_count: 1250,
+                    featured: true,
+                    flash_sale: true,
+                    active: true,
+                    created_at: new Date().toISOString()
+                  },
+                  {
+                    id: 'mock-2',
+                    name: 'Smartwatch Series 9 - Caixa de Alumínio',
+                    description: 'Relógio inteligente com monitoramento de saúde avançado.',
+                    price: 1899.00,
+                    original_price: 2499.00,
+                    image_url: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800',
+                    affiliate_link: '#',
+                    store: 'amazon',
+                    store_type: 'amazon',
+                    category: 'Acessórios',
+                    rating: 4.9,
+                    rating_count: 840,
+                    featured: true,
+                    active: true,
+                    created_at: new Date().toISOString()
+                  },
+                  {
+                    id: 'mock-3',
+                    name: 'Tênis Nike Air Force 1 07 - White',
+                    description: 'O clássico da Nike com amortecimento Air e estilo atemporal.',
+                    price: 749.90,
+                    original_price: 899.00,
+                    image_url: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800',
+                    affiliate_link: '#',
+                    store: 'mercado_livre',
+                    store_type: 'mercado_livre',
+                    category: 'Moda',
+                    rating: 4.7,
+                    rating_count: 2100,
+                    featured: true,
+                    active: true,
+                    created_at: new Date().toISOString()
+                  },
+                  {
+                    id: 'mock-4',
+                    name: 'Câmera Canon EOS R50 Mirrorless 4K',
+                    description: 'Câmera profissional compacta para criadores de conteúdo.',
+                    price: 4999.00,
+                    original_price: 5899.00,
+                    image_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800',
+                    affiliate_link: '#',
+                    store: 'aliexpress',
+                    store_type: 'aliexpress',
+                    category: 'Eletrônicos',
+                    rating: 5.0,
+                    rating_count: 156,
+                    featured: true,
+                    flash_sale: true,
+                    active: true,
+                    created_at: new Date().toISOString()
+                  },
+                  {
+                    id: 'mock-5',
+                    name: 'Mouse Gamer Logitech G Pro Wireless',
+                    description: 'O mouse preferido dos profissionais de eSports.',
+                    price: 549.90,
+                    original_price: 799.00,
+                    image_url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800',
+                    affiliate_link: '#',
+                    store: 'amazon',
+                    store_type: 'amazon',
+                    category: 'Informática',
+                    rating: 4.9,
+                    rating_count: 3200,
+                    featured: true,
+                    active: true,
+                    created_at: new Date().toISOString()
+                  }
+                ]}
+                title="Destaques e Ofertas"
+                subtitle="Nossa seleção especial com os itens mais desejados e as ofertas relâmpago mais imperdíveis da semana."
+                onProductClick={handleProductClick}
+              />
             )}
 
             {/* Main Catalog Section */}
@@ -165,7 +253,7 @@ function App() {
                       Explore nossa lista completa com {totalProducts} produtos selecionados especialmente para você.
                     </p>
                   </div>
-                  
+
                   <div className="flex items-center gap-3 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-lg">
                     <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Total Encontrado</span>
                     <span className="text-xl font-black">{totalProducts}</span>
@@ -173,7 +261,7 @@ function App() {
                 </div>
 
                 {loading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
                     {[...Array(8)].map((_, i) => (
                       <div key={i} className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm animate-pulse-slow">
                         <div className="aspect-square bg-gray-100"></div>
@@ -197,7 +285,7 @@ function App() {
                     <p className="text-gray-500 text-lg max-w-md mx-auto leading-relaxed">
                       Não encontramos produtos para sua busca ou filtros atuais. Tente mudar os termos ou resetar a pesquisa.
                     </p>
-                    <button 
+                    <button
                       onClick={() => {
                         setSearchTerm('')
                         setSelectedCategory('all')
@@ -210,7 +298,7 @@ function App() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
                       {products.map(product => (
                         <ProductCard
                           key={product.id}
@@ -235,7 +323,7 @@ function App() {
                             Anterior
                           </span>
                         </button>
-                        
+
                         <div className="flex items-center gap-2 p-1.5 bg-gray-50 rounded-2xl border border-gray-100">
                           {[...Array(totalPages)].map((_, i) => (
                             <button
@@ -244,17 +332,16 @@ function App() {
                                 setCurrentPage(i + 1)
                                 document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })
                               }}
-                              className={`w-12 h-12 rounded-xl font-bold transition-all duration-300 ${
-                                currentPage === i + 1
-                                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 ring-4 ring-blue-600/10'
-                                  : 'text-gray-400 hover:text-gray-900 hover:bg-white'
-                              }`}
+                              className={`w-12 h-12 rounded-xl font-bold transition-all duration-300 ${currentPage === i + 1
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 ring-4 ring-blue-600/10'
+                                : 'text-gray-400 hover:text-gray-900 hover:bg-white'
+                                }`}
                             >
                               {i + 1}
                             </button>
                           ))}
                         </div>
-                        
+
                         <button
                           onClick={() => {
                             setCurrentPage(Math.min(totalPages, currentPage + 1))

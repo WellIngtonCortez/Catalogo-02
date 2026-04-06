@@ -20,12 +20,13 @@ export interface Product {
   original_price?: number
   image_url: string
   affiliate_link: string
-  store: 'shopee' | 'amazon' | 'mercado_livre'
-  store_type: 'shopee' | 'amazon' | 'mercado_livre'
+  store: 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress'
+  store_type: 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress'
   category: string
   rating: number
   rating_count: number
   featured: boolean
+  flash_sale?: boolean
   active: boolean
   created_at: string
 }

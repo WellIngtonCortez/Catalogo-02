@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Search, Filter, ShoppingBag } from 'lucide-react'
+import { Search, User } from 'lucide-react'
 
 interface HeaderProps {
   searchTerm: string
@@ -14,22 +14,17 @@ export function Header({ searchTerm, setSearchTerm, logo }: HeaderProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-[#2563eb] rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12 duration-300">
-                <ShoppingBag className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <img 
-                  src={logo} 
-                  alt="WellShop" 
-                  className="w-24 h-8 object-contain transition-all duration-300 group-hover:scale-105"
-                />
-                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-tighter leading-none -mt-1">
-                  Ofertas Selecionadas
-                </span>
-              </div>
+              <img
+                src={logo}
+                alt=""
+                className="w-23 h-10 rounded-xl object-contain transition-all duration-300 group-hover:scale-110 shadow-sm border border-gray-100"
+              />
+              <span className="text-xl font-black text-[#1a1a1a] tracking-tighter transition-colors group-hover:text-blue-600">
+
+              </span>
             </Link>
           </div>
-          
+
           <div className="flex items-center gap-6 flex-1 max-w-xl mx-12">
             <div className="relative w-full group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
@@ -43,7 +38,7 @@ export function Header({ searchTerm, setSearchTerm, logo }: HeaderProps) {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
               {searchTerm && (
-                <button 
+                <button
                   onClick={() => setSearchTerm('')}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
@@ -52,14 +47,14 @@ export function Header({ searchTerm, setSearchTerm, logo }: HeaderProps) {
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center gap-4">
-            <Link 
+            <Link
               to="/admin/login"
-              className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+              className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 shadow-md active:scale-95"
             >
-              <Filter className="w-4 h-4" />
-              <span className="text-sm font-bold">Admin</span>
+              <User className="w-4 h-4 fill-white" />
+              <span className="text-sm font-bold tracking-tight">Admin</span>
             </Link>
           </div>
         </div>

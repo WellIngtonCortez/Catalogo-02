@@ -7,6 +7,8 @@ import { Product } from '../services/supabase'
 import { Star, ShoppingBag, Flame, Tag, ArrowLeft, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 
+import logoWellshop from '../assets/logo_wellshop.png'
+
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -152,12 +154,9 @@ export function ProductDetail() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#2563eb] rounded-xl flex items-center justify-center">
-                  <ShoppingBag className="w-5 h-5 text-white" />
+                <div className="flex items-center gap-2">
+                  <img src={logoWellshop} alt="WellShop" className="h-8 w-auto object-contain" />
                 </div>
-                <h1 className="text-xl font-bold text-[#374151]">WellShop</h1>
-              </div>
             </div>
           </div>
         </header>

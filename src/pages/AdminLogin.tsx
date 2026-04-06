@@ -21,7 +21,6 @@ export function AdminLogin() {
 
     try {
       setLoading(true)
-      
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password

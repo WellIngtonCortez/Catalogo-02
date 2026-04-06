@@ -1,4 +1,5 @@
-import { ShoppingBag, Instagram, Facebook, Twitter, Mail } from 'lucide-react'
+import { Instagram, Facebook, Twitter, Mail } from 'lucide-react'
+import logoWellshop from '../assets/logo_wellshop.png'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -9,10 +10,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-2xl flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-blue-500/20">
-                <ShoppingBag className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 tracking-tight">WellShop</h3>
+              <img src={logoWellshop} alt="WellShop" className="h-10 w-auto object-contain" />
             </div>
             <p className="text-gray-500 leading-relaxed text-sm">
               As melhores ofertas da Shopee, Amazon e Mercado Livre reunidas em um só lugar. Curadoria premium para suas compras.
@@ -72,12 +70,8 @@ export function Footer() {
         
         <div className="pt-8 border-t border-gray-100 text-center">
           <p className="text-gray-400 text-xs mb-3">
-            © {currentYear} WellShop · Todos os direitos reservados.
+            © {currentYear} · Todos os direitos reservados.
           </p>
-          <div className="flex items-center justify-center gap-2 text-gray-300">
-            <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded uppercase tracking-widest">Shopee Authorized</span>
-            <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded uppercase tracking-widest">Amazon Partner</span>
-          </div>
           <p className="text-[10px] text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
             Este site contém links de afiliado. Ao comprar através de nossos links, você nos apoia sem pagar nada a mais por isso. Todas as marcas registradas pertencem aos seus respectivos proprietários.
           </p>
