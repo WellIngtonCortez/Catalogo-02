@@ -5,7 +5,7 @@ import { ProductService } from '../services/productService'
 import { AnalyticsService } from '../services/analyticsService'
 import { UploadService } from '../services/uploadService'
 import { Product, ProductStats } from '../services/supabase'
-import { ShoppingBag, Upload, Edit, Trash2, BarChart3, LogOut, Plus, X } from 'lucide-react'
+import { ShoppingBag, Upload, Edit, Trash2, BarChart3, LogOut, Plus, X, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
 import logoWellshop from '../assets/logo_wellshop.png'
@@ -311,16 +311,30 @@ export function AdminPanel() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <LojaSelector
-                selectedStore={formData.store_type}
-                onStoreSelect={(store) => setFormData(prev => ({ ...prev, store_type: store, store: store as any }))}
-                error={storeError}
-              />
+            <div className="bg-white rounded-2xl p-6 lg:p-8 shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                  <Plus className="w-5 h-5" />
+                </div>
+                <h2 className="text-lg font-bold text-gray-900 tracking-tight">Adicionar Produto</h2>
+              </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4 mt-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">Nome</label>
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-3">
+                    Loja *
+                  </label>
+                  <LojaSelector
+                    selectedStore={formData.store_type}
+                    onStoreSelect={(store) => setFormData(prev => ({ ...prev, store_type: store, store: store as any }))}
+                    error={storeError}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    Nome Do Produto *
+                  </label>
                   <input
                     id="name"
                     name="name"
@@ -328,26 +342,16 @@ export function AdminPanel() {
                     required
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">Descrição</label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    required
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
-                    rows={3}
+                    placeholder="Ex: Fone Bluetooth JBL Tune 510"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Preço</label>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                      Preço Atual *
+                    </label>
                     <input
                       id="price"
                       name="price"
@@ -356,12 +360,15 @@ export function AdminPanel() {
                       step="0.01"
                       value={formData.price}
                       onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
+                      placeholder="0,00"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Preço Original</label>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                      Preço Original
+                    </label>
                     <input
                       id="original_price"
                       name="original_price"
@@ -369,66 +376,33 @@ export function AdminPanel() {
                       step="0.01"
                       value={formData.original_price}
                       onChange={(e) => setFormData(prev => ({ ...prev, original_price: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
+                      placeholder="0,00 (opcional)"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">URL da Imagem</label>
-                  <div className="flex gap-2">
-                    <input
-                      id="image_url"
-                      name="image_url"
-                      type="url"
-                      required
-                      value={formData.image_url}
-                      onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-                      className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
-                    />
-                    <label className="px-4 py-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer">
-                      <Upload className="w-5 h-5" />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        disabled={uploading}
-                      />
-                    </label>
-                  </div>
-                  {uploading && <p className="text-sm text-blue-600">Enviando imagem...</p>}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">Link de Afiliado</label>
-                  <input
-                    id="affiliate_link"
-                    name="affiliate_link"
-                    type="url"
-                    required
-                    value={formData.affiliate_link}
-                    onChange={(e) => setFormData(prev => ({ ...prev, affiliate_link: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#374151] mb-2">Categoria</label>
-                  <input
-                    id="category"
-                    name="category"
-                    type="text"
-                    required
-                    value={formData.category}
-                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
-                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Avaliação</label>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                      Categoria
+                    </label>
+                    <input
+                      id="category"
+                      name="category"
+                      type="text"
+                      required
+                      value={formData.category}
+                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                      placeholder="Ex: Eletrônicos, Moda..."
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                      Avaliação (0-5)
+                    </label>
                     <input
                       id="rating"
                       name="rating"
@@ -438,12 +412,16 @@ export function AdminPanel() {
                       max="5"
                       value={formData.rating}
                       onChange={(e) => setFormData(prev => ({ ...prev, rating: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
+                      placeholder="Ex: 4.5"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                     />
                   </div>
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Nº Avaliações</label>
+                <div>
+                    <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                      Nº De Avaliações
+                    </label>
                     <input
                       id="rating_count"
                       name="rating_count"
@@ -451,39 +429,118 @@ export function AdminPanel() {
                       min="0"
                       value={formData.rating_count}
                       onChange={(e) => setFormData(prev => ({ ...prev, rating_count: e.target.value }))}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20"
+                      placeholder="Ex: 1250"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                     />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    URL Da Imagem *
+                  </label>
+                  <input
+                    id="image_url"
+                    name="image_url"
+                    type="url"
+                    required
+                    value={formData.image_url}
+                    onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                    placeholder="https://..."
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium mb-3"
+                  />
+                  
+                  <div className="w-full h-48 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center bg-gray-50/50 text-gray-400 overflow-hidden relative group">
+                    {uploading && (
+                       <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10">
+                          <span className="text-purple-600 font-bold text-sm">Enviando...</span>
+                       </div>
+                    )}
+                    {formData.image_url ? (
+                      <img src={formData.image_url} alt="Preview" className="w-full h-full object-contain" />
+                    ) : (
+                      <>
+                        <ImageIcon className="w-8 h-8 mb-2 opacity-40 group-hover:scale-110 transition-transform duration-300" />
+                        <span className="text-xs font-semibold text-gray-400">Prévia da imagem</span>
+                      </>
+                    )}
+                  </div>
+                  
+                  {/* Escondendo o antigo botão de upload atrás da customização */}
+                  <div className="mt-2 text-right">
+                    <label className="text-[10px] font-bold text-purple-600 hover:text-purple-800 uppercase tracking-wider cursor-pointer transition-colors">
+                      Ou enviar arquivo do computador
+                      <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploading}
+                      />
+                    </label>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    Link De Afiliado *
+                  </label>
+                  <input
+                    id="affiliate_link"
+                    name="affiliate_link"
+                    type="url"
+                    required
+                    value={formData.affiliate_link}
+                    onChange={(e) => setFormData(prev => ({ ...prev, affiliate_link: e.target.value }))}
+                    placeholder="https://..."
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">
+                    Descrição Curta
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    required
+                    value={formData.description}
+                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    placeholder="Descreva brevemente o produto, principais características..."
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium resize-y"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="flex items-center gap-6 py-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.featured}
                       onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                      className="rounded"
+                      className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 accent-purple-600"
                     />
-                    <span className="text-sm text-[#374151]">Destaque</span>
+                    <span className="text-xs font-semibold text-gray-700">⭐ Produto em Destaque</span>
                   </label>
 
-                  <label className="flex items-center gap-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.active}
                       onChange={(e) => setFormData(prev => ({ ...prev, active: e.target.checked }))}
-                      className="rounded"
+                      className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 accent-green-600"
                     />
-                    <span className="text-sm text-[#374151]">Ativo</span>
+                    <span className="text-xs font-semibold text-gray-700">✅ Produto Ativo</span>
                   </label>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="submit"
-                    className="flex-1 bg-[#2563eb] text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                    className="flex-1 bg-purple-600 text-white px-6 py-4 rounded-xl font-bold text-sm tracking-wide hover:bg-purple-700 transition-colors shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2"
                   >
-                    {editingId ? 'Atualizar' : 'Adicionar'} Produto
+                    <Plus className="w-5 h-5" />
+                    {editingId ? 'Atualizar Produto' : 'Adicionar Produto'}
                   </button>
                   
                   {editingId && (
@@ -508,9 +565,9 @@ export function AdminPanel() {
                           active: true
                         })
                       }}
-                      className="px-6 py-3 bg-gray-200 text-[#374151] rounded-xl font-medium hover:bg-gray-300 transition-colors"
+                      className="px-5 py-4 bg-gray-100 text-gray-500 rounded-xl font-bold hover:bg-gray-200 transition-colors"
                     >
-                      <X className="w-4 h-4" />
+                      Cancelar
                     </button>
                   )}
                 </div>
