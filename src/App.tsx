@@ -17,7 +17,6 @@ import aliexpressLogo from './assets/aliexpress.png'
 
 // New Components
 import { Header } from './components/Header'
-import { Hero } from './components/Hero'
 import { FilterSection } from './components/FilterSection'
 import { Footer } from './components/Footer'
 import { FeaturedCarousel } from './components/FeaturedCarousel'
@@ -123,8 +122,6 @@ function App() {
           />
 
           <main className="animate-fade-in">
-            <Hero />
-
             <FilterSection
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
