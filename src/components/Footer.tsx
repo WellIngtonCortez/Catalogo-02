@@ -3,7 +3,7 @@ import logoWellshop from '../assets/logo_wellshop.png'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
-  
+
   return (
     <footer className="bg-white border-t border-gray-100 py-16 scroll-mt-20 overflow-hidden">
       <div className="container mx-auto px-6">
@@ -13,7 +13,8 @@ export function Footer() {
               <img src={logoWellshop} alt="WellShop" className="h-10 w-auto object-contain" />
             </div>
             <p className="text-gray-500 leading-relaxed text-sm">
-              As melhores ofertas da Shopee, Amazon e Mercado Livre reunidas em um só lugar. Curadoria premium para suas compras.
+              As melhores ofertas da Shopee, Amazon, Mercado Livre e AliExpress reunidas em um só lugar.
+              <br />
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-blue-50 hover:text-blue-600 transition-all">
@@ -27,7 +28,7 @@ export function Footer() {
               </a>
             </div>
           </div>
-          
+
           <div>
             <h4 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6">Categorias Populares</h4>
             <ul className="space-y-4">
@@ -38,26 +39,26 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h4 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6">Institucional</h4>
             <ul className="space-y-4">
-              {['Quem Somos', 'Privacidade', 'Termos de Uso', 'Afiliados'].map(link => (
+              {['Quem Somos', 'Privacidade', 'Termos de Uso', ''].map(link => (
                 <li key={link}>
                   <a href="#" className="text-gray-500 hover:text-blue-600 transition-colors text-sm">{link}</a>
                 </li>
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h4 className="text-sm font-bold text-gray-900 uppercase tracking-widest mb-6">Newsletter</h4>
             <p className="text-gray-500 text-sm mb-6 leading-relaxed">
               Receba as melhores promoções diretamente no seu e-mail.
             </p>
             <div className="flex gap-2">
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="seu@email.com"
                 className="flex-1 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all"
               />
@@ -67,7 +68,7 @@ export function Footer() {
             </div>
           </div>
         </div>
-        
+
         <div className="pt-8 border-t border-gray-100 text-center">
           <p className="text-gray-400 text-xs mb-3">
             © {currentYear} · Todos os direitos reservados.

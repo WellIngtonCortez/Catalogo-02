@@ -36,13 +36,20 @@ export function ProductDetail() {
   }
 
   const handleAffiliateClick = async () => {
-    if (!product) return
+    if (!product || !product.affiliate_link) return
+
+    // Prevenção de XSS: Garantir que a URL comece com http ou https
+    if (!product.affiliate_link.startsWith('http://') && !product.affiliate_link.startsWith('https://')) {
+      console.error('URL de afiliado inválida detectada:', product.affiliate_link)
+      toast.error('Link de produto inválido')
+      return
+    }
 
     try {
       // Registrar clique antes de redirecionar
       await AnalyticsService.trackClick(product.id)
       
-      // Redirecionar para link de afiliado
+      // Redirecionar para link de afiliado seguro
       window.open(product.affiliate_link, '_blank', 'noopener,noreferrer')
       
       toast.success('Redirecionando para a loja...')

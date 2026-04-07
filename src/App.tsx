@@ -117,10 +117,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gray-50/50">
           <Header
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
             logo={logoWellshop}
           />
 
@@ -128,6 +126,8 @@ function App() {
             <Hero />
 
             <FilterSection
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
               selectedStore={selectedStore}
               setSelectedStore={setSelectedStore}
               selectedCategory={selectedCategory}

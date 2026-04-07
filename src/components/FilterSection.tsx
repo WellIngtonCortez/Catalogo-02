@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Category } from '../services/supabase'
+import { Search } from 'lucide-react'
 
 interface FilterSectionProps {
+  searchTerm: string
+  setSearchTerm: (term: string) => void
   selectedStore: string
   setSelectedStore: (store: string) => void
   selectedCategory: string
@@ -13,6 +16,8 @@ interface FilterSectionProps {
 }
 
 export function FilterSection({
+  searchTerm,
+  setSearchTerm,
   selectedStore,
   setSelectedStore,
   selectedCategory,
@@ -30,61 +35,82 @@ export function FilterSection({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Calculate opacity and translation based on scroll
-  // Fade out starts at 100px and ends at 400px
+  // Fade out the store filter on mobile
   const opacity = Math.max(0, 1 - Math.max(0, scrollY - 100) / 300)
   const translateY = Math.min(20, Math.max(0, scrollY - 100) / 10)
   const isHidden = opacity === 0
 
   return (
-    <section className="bg-white/80 backdrop-blur-md sticky top-[80px] z-30 border-y border-gray-100 py-4 shadow-sm transition-all duration-300">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
+    <section className="bg-white/90 backdrop-blur-md sticky top-[56px] md:top-[64px] z-40 border-b border-gray-200 py-4 shadow-sm transition-all duration-300">
+      <div className="container mx-auto px-4 lg:px-6 space-y-4">
+        
+        {/* Top Row: Search and Stores */}
+        <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-8 w-full">
+          
+          {/* Search Input */}
+          <div className="relative w-full lg:w-1/3 group shrink-0">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+            <input
+              id="search"
+              name="search"
+              type="text"
+              placeholder="Buscar ofertas, categorias..."
+              className="w-full px-5 py-3 rounded-2xl bg-white lg:bg-gray-50 border border-gray-200 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 transition-all duration-300 pl-12 shadow-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <span className="text-[10px] font-bold bg-gray-200 px-1.5 py-0.5 rounded uppercase">Esc</span>
+              </button>
+            )}
+          </div>
+
           {/* Store Filter - Fades out on scroll */}
           <div 
-            className="flex items-center gap-4 w-full lg:w-auto transition-all duration-300 origin-top"
+            className="flex items-center gap-4 w-full transition-all duration-300 origin-top overflow-hidden"
             style={{ 
-              opacity: opacity,
-              transform: `translateY(${-translateY}px)`,
-              pointerEvents: isHidden ? 'none' : 'auto',
-              maxHeight: isHidden ? '0' : '200px',
-              margin: isHidden ? '0' : '',
-              visibility: isHidden ? 'hidden' : 'visible'
+              opacity: window.innerWidth < 1024 ? opacity : 1, // Let it shrink only on mobile maybe, or just keep original logic
+              transform: `translateY(${window.innerWidth < 1024 ? -translateY : 0}px)`,
+              pointerEvents: (window.innerWidth < 1024 && isHidden) ? 'none' : 'auto',
+              maxHeight: (window.innerWidth < 1024 && isHidden) ? '0' : '200px',
             }}
           >
-            <div className="flex bg-gray-100/50 p-2 rounded-[24px] border border-gray-100 w-full lg:w-auto overflow-x-auto no-scrollbar snap-x gap-1">
+            <div className="flex bg-gray-50/80 p-2 rounded-2xl border border-gray-100 w-full overflow-x-auto no-scrollbar snap-x gap-2">
               {stores.map(store => {
                 const isActive = selectedStore === store.id
                 return (
                   <button
                     key={store.id}
                     onClick={() => setSelectedStore(isActive ? 'all' : store.id)}
-                    className={`flex-none flex items-center justify-center p-3 rounded-2xl transition-all duration-500 group/btn snap-center min-w-[70px] ${
+                    className={`flex-none flex items-center justify-center p-2 rounded-xl transition-all duration-500 group/btn snap-start min-w-[70px] ${
                       isActive
-                        ? 'bg-white text-blue-600 shadow-2xl shadow-blue-500/20 ring-1 ring-black/5 transform scale-[1.05]'
-                        : 'text-gray-400 hover:text-gray-900 hover:bg-white/80 hover:shadow-xl'
+                        ? 'bg-white shadow-md ring-1 ring-black/5 transform scale-100'
+                        : 'hover:bg-white/80 hover:shadow-sm'
                     }`}
                   >
                     {store.logo && (
                       <div 
-                        className={`relative flex items-center justify-center transition-all duration-500 ${isActive ? 'scale-[1.12] drop-shadow-md' : 'grayscale group-hover/btn:grayscale-0 group-hover/btn:scale-105 opacity-60 group-hover/btn:opacity-100'}`}
+                        className={`relative flex items-center justify-center transition-all duration-500 ${isActive ? 'scale-110 drop-shadow-sm' : 'grayscale group-hover/btn:grayscale-0 opacity-70 group-hover/btn:opacity-100'}`}
                         style={{ 
-                          transform: isActive ? `scale(${(store.scale || 1) * 1.12})` : `scale(${store.scale || 1})`,
-                          minWidth: store.id === 'mercado_livre' ? '120px' : store.id === 'aliexpress' ? '100px' : 'auto',
-                          padding: store.id === 'aliexpress' ? '0 10px' : '0'
+                          transform: isActive ? `scale(${(store.scale || 1) * 1.15})` : `scale(${store.scale || 1})`,
+                          minWidth: store.id === 'mercado_livre' ? '100px' : store.id === 'aliexpress' ? '90px' : 'auto',
                         }}
                       >
                         <img 
                           src={store.logo} 
                           alt={store.name} 
-                          className="h-8 w-auto object-contain max-w-[150px] block mx-auto"
+                          className="h-7 w-auto object-contain max-w-[120px] block mx-auto"
                         />
                       </div>
                     )}
                     {!store.logo && (
-                       <div className="flex items-center gap-2 px-2">
-                        <store.icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
-                        <span className={`text-sm font-bold ${isActive ? 'text-blue-600' : 'text-gray-500'}`}>{store.name}</span>
+                       <div className="flex items-center gap-1.5 px-2">
+                        <store.icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+                        <span className={`text-xs font-bold whitespace-nowrap ${isActive ? 'text-blue-600' : 'text-gray-500'}`}>{store.name}</span>
                        </div>
                     )}
                   </button>
@@ -92,40 +118,41 @@ export function FilterSection({
               })}
             </div>
           </div>
+        </div>
 
-          {/* Combined Secondary Filters */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Categoria</span>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full sm:w-auto bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100 text-sm font-bold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all cursor-pointer appearance-none hover:bg-white min-w-[160px]"
-              >
-                <option value="all">Todas</option>
-                {categories.map(category => (
-                  <option key={category.name} value={category.name}>
-                    {category.name} ({category.count})
-                  </option>
-                ))}
-              </select>
-            </div>
+        {/* Bottom Row: Sort and Category */}
+        <div className="flex flex-row items-center justify-between gap-3 overflow-x-auto no-scrollbar">
+          <div className="flex flex-col flex-1 min-w-[140px]">
+            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">Categoria</span>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full bg-white px-3 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all cursor-pointer shadow-sm truncate"
+            >
+              <option value="all">Todas as Categorias</option>
+              {categories.map(category => (
+                <option key={category.name} value={category.name}>
+                  {category.name} ({category.count})
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] whitespace-nowrap">Ordenar</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full sm:w-auto bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100 text-sm font-bold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all cursor-pointer appearance-none hover:bg-white min-w-[160px]"
-              >
-                <option value="newest">Mais recentes</option>
-                <option value="price_asc">Menor preço</option>
-                <option value="price_desc">Maior preço</option>
-                <option value="rating">Melhor avaliação</option>
-              </select>
-            </div>
+          <div className="flex flex-col flex-1 min-w-[140px]">
+            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 ml-1">Ordenar por</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="w-full bg-white px-3 py-2.5 rounded-xl border border-gray-200 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all cursor-pointer shadow-sm truncate"
+            >
+              <option value="newest">Mais recentes</option>
+              <option value="price_asc">Menor preço</option>
+              <option value="price_desc">Maior preço</option>
+              <option value="rating">Melhor avaliação</option>
+            </select>
           </div>
         </div>
+
       </div>
     </section>
   )
