@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <section className="bg-white/50 py-16 lg:py-24 relative overflow-hidden backdrop-blur-sm">
+    <section className="bg-white/50 py-16 lg:py-24 relative overflow-hidden">
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-blue-100/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
         <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-blue-50/20 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4"></div>

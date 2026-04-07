@@ -57,14 +57,14 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
 
         {/* Store Logo - Top Left for separation */}
         <div className="absolute top-2 left-2 z-20 pointer-events-none select-none transition-all duration-300">
-           <div className={`p-1 bg-white/95 backdrop-blur-md rounded-xl shadow-md border ${getStoreColor()} flex items-center justify-center w-10 h-10 md:w-12 md:h-12 overflow-hidden ring-2 ring-white/50`}>
+           <div className={`p-1 bg-white rounded-xl shadow-md border ${getStoreColor()} flex items-center justify-center w-10 h-10 md:w-12 md:h-12 overflow-hidden ring-2 ring-white/50`}>
              <img src={getStoreLogo() || ''} alt={product.store} className="w-full h-full object-contain" />
             </div>
         </div>
 
         {/* Destaque Badge - Bottom Left */}
         {product.featured && (
-          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1.5 bg-blue-600/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-full shadow-lg shadow-blue-600/20 border border-blue-400">
+          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1.5 bg-blue-600/90 text-white px-2.5 py-1 rounded-full shadow-lg shadow-blue-600/20 border border-blue-400">
              <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Destaque</span>
           </div>
@@ -72,7 +72,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
 
         {/* Flash Sale Badge - Bottom Right */}
         {product.flash_sale && (
-          <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1.5 bg-orange-500/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-full shadow-lg shadow-orange-600/20 border border-orange-400">
+          <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1.5 bg-orange-500/90 text-white px-2.5 py-1 rounded-full shadow-lg shadow-orange-600/20 border border-orange-400">
              <Flame className="w-3 h-3 fill-white" />
              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none">Oferta</span>
           </div>
