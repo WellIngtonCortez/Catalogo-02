@@ -19,7 +19,7 @@ const stores = [
 export function LojaSelector({ selectedStore, onStoreSelect, error = false }: LojaSelectorProps) {
   return (
     <div className="w-full">
-      <div className={`flex bg-gray-50/80 p-1.5 rounded-xl border w-full overflow-x-auto no-scrollbar snap-x gap-1 transition-colors ${error && !selectedStore ? 'border-red-300 ring-2 ring-red-500/20' : 'border-gray-100'}`}>
+      <div className={`grid grid-cols-2 sm:grid-cols-4 bg-gray-50/80 p-1.5 rounded-xl border w-full gap-1.5 transition-colors ${error && !selectedStore ? 'border-red-300 ring-2 ring-red-500/20' : 'border-gray-100'}`}>
         {stores.map(store => {
           const isActive = selectedStore === store.id
           return (
@@ -27,9 +27,9 @@ export function LojaSelector({ selectedStore, onStoreSelect, error = false }: Lo
               key={store.id}
               type="button"
               onClick={() => onStoreSelect(store.id)}
-              className={`flex-none flex items-center justify-center p-3 rounded-lg transition-all duration-500 group/btn snap-start min-w-[60px] flex-1 ${
+              className={`flex items-center justify-center p-3 rounded-lg transition-all duration-500 group/btn w-full ${
                 isActive
-                  ? 'bg-white shadow-md ring-1 ring-black/5 transform scale-100'
+                  ? 'bg-white shadow-md ring-1 ring-black/5 transform scale-105'
                   : 'hover:bg-white/80 hover:shadow-sm'
               }`}
             >
