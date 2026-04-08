@@ -138,98 +138,7 @@ function App() {
             {/* Featured and Flash Sale Section */}
             {!debouncedSearch && selectedStore === 'all' && selectedCategory === 'all' && (
               <FeaturedCarousel
-                products={[
-                  ...featuredProducts, 
-                  ...flashSaleProducts,
-                  // Mock products to fill the carousel
-                  {
-                    id: 'mock-1',
-                    name: 'Fone Bluetooth JBL Tune 510BT Pure Bass',
-                    description: 'Fone de ouvido com som Pure Bass e até 40 horas de bateria.',
-                    price: 249.90,
-                    original_price: 399.90,
-                    image_url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
-                    affiliate_link: '#',
-                    store: 'shopee',
-                    store_type: 'shopee',
-                    category: 'Eletrônicos',
-                    rating: 4.8,
-                    rating_count: 1250,
-                    featured: true,
-                    flash_sale: true,
-                    active: true,
-                    created_at: new Date().toISOString()
-                  },
-                  {
-                    id: 'mock-2',
-                    name: 'Smartwatch Series 9 - Caixa de Alumínio',
-                    description: 'Relógio inteligente com monitoramento de saúde avançado.',
-                    price: 1899.00,
-                    original_price: 2499.00,
-                    image_url: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800',
-                    affiliate_link: '#',
-                    store: 'amazon',
-                    store_type: 'amazon',
-                    category: 'Acessórios',
-                    rating: 4.9,
-                    rating_count: 840,
-                    featured: true,
-                    active: true,
-                    created_at: new Date().toISOString()
-                  },
-                  {
-                    id: 'mock-3',
-                    name: 'Tênis Nike Air Force 1 07 - White',
-                    description: 'O clássico da Nike com amortecimento Air e estilo atemporal.',
-                    price: 749.90,
-                    original_price: 899.00,
-                    image_url: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800',
-                    affiliate_link: '#',
-                    store: 'mercado_livre',
-                    store_type: 'mercado_livre',
-                    category: 'Moda',
-                    rating: 4.7,
-                    rating_count: 2100,
-                    featured: true,
-                    active: true,
-                    created_at: new Date().toISOString()
-                  },
-                  {
-                    id: 'mock-4',
-                    name: 'Câmera Canon EOS R50 Mirrorless 4K',
-                    description: 'Câmera profissional compacta para criadores de conteúdo.',
-                    price: 4999.00,
-                    original_price: 5899.00,
-                    image_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800',
-                    affiliate_link: '#',
-                    store: 'aliexpress',
-                    store_type: 'aliexpress',
-                    category: 'Eletrônicos',
-                    rating: 5.0,
-                    rating_count: 156,
-                    featured: true,
-                    flash_sale: true,
-                    active: true,
-                    created_at: new Date().toISOString()
-                  },
-                  {
-                    id: 'mock-5',
-                    name: 'Mouse Gamer Logitech G Pro Wireless',
-                    description: 'O mouse preferido dos profissionais de eSports.',
-                    price: 549.90,
-                    original_price: 799.00,
-                    image_url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800',
-                    affiliate_link: '#',
-                    store: 'amazon',
-                    store_type: 'amazon',
-                    category: 'Informática',
-                    rating: 4.9,
-                    rating_count: 3200,
-                    featured: true,
-                    active: true,
-                    created_at: new Date().toISOString()
-                  }
-                ]}
+                products={[...featuredProducts, ...flashSaleProducts]}
                 title="Destaques e Ofertas"
                 subtitle="Nossa seleção especial com os itens mais desejados e as ofertas relâmpago mais imperdíveis da semana."
                 onProductClick={handleProductClick}
@@ -239,23 +148,7 @@ function App() {
             {/* Main Catalog Section */}
             <section className="py-20 lg:py-28 bg-white" id="catalog">
               <div className="container mx-auto px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b border-gray-100 pb-10">
-                  <div className="space-y-4">
-                    <div className="flex bg-gray-50 w-fit px-3 py-1 rounded-lg border border-gray-100 text-gray-500">
-                      <ShoppingBag className="w-4 h-4 mr-2" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Catálogo {new Date().getFullYear()}</span>
-                    </div>
-                    <h2 className="text-4xl font-bold text-gray-900 tracking-tight">Todas as Ofertas</h2>
-                    <p className="text-gray-500 max-w-xl text-lg">
-                      Explore nossa lista completa com {totalProducts} produtos selecionados especialmente para você.
-                    </p>
-                  </div>
 
-                  <div className="flex items-center gap-3 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-lg">
-                    <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Total Encontrado</span>
-                    <span className="text-xl font-black">{totalProducts}</span>
-                  </div>
-                </div>
 
                 {loading ? (
                   <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
