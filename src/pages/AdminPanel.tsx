@@ -10,9 +10,11 @@ import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
 import logoWellshop from '../assets/logo_wellshop.png'
 
+import { User } from '@supabase/supabase-js'
+
 export function AdminPanel() {
   const navigate = useNavigate()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<Product[]>([])
   const [stats, setStats] = useState<ProductStats[]>([])
@@ -125,8 +127,8 @@ export function AdminPanel() {
         original_price: formData.original_price ? parseFloat(formData.original_price) : undefined,
         image_url: formData.image_url,
         affiliate_link: formData.affiliate_link,
-        store: formData.store as any,
-        store_type: formData.store_type,
+        store: formData.store as 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress',
+        store_type: formData.store_type as 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress',
         category: formData.category,
         rating: parseFloat(formData.rating) || 0,
         rating_count: parseInt(formData.rating_count) || 0,
@@ -136,17 +138,21 @@ export function AdminPanel() {
 
       if (editingId) {
         // Atualizar produto
-        await supabase
+        const { error: updateError } = await supabase
           .from('products')
           .update(productData)
           .eq('id', editingId)
+          
+        if (updateError) throw updateError
         
         toast.success('Produto atualizado com sucesso!')
       } else {
         // Criar produto
-        await supabase
+        const { error: insertError } = await supabase
           .from('products')
           .insert(productData)
+          
+        if (insertError) throw insertError
         
         toast.success('Produto criado com sucesso!')
       }
