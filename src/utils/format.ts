@@ -27,15 +27,19 @@ export const parsePrice = (value: string | number | undefined | null): number =>
   if (value === undefined || value === null) return 0;
   if (typeof value === 'number') return value;
   
-  // Se for string, limpar formatação brasileira
-  // Remove R$, espaços e pontos de milhar
-  // Substitui a vírgula decimal por ponto
-  const cleanValue = value
+  // Limpar símbolos e espaços
+  let cleanValue = value.toString()
     .replace('R$', '')
-    .replace(/\s/g, '')
-    .replace(/\./g, '') // Remove separador de milhar
-    .replace(',', '.'); // Converte decimal para padrão JS
-    
+    .replace(/\s/g, '');
+
+  // Se o valor já for um número válido no formato JS (ex: "79.11"), 
+  // e não contiver vírgula, podemos dar parse diretamente.
+  // Isso evita que o ponto decimal do HTML5 input type="number" seja removido.
+  if (cleanValue.includes(',') ) {
+    // Se tem vírgula, tratamos como formato brasileiro (1.234,56)
+    cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
+  }
+  
   const parsed = parseFloat(cleanValue);
   return isNaN(parsed) ? 0 : parsed;
 };
