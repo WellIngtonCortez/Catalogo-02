@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import { ProductService } from '../services/productService'
 import { AnalyticsService } from '../services/analyticsService'
 import { Product } from '../services/supabase'
+import { formatPrice } from '../utils/format'
 import { Star, ShoppingBag, Flame, Tag, ArrowLeft, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -211,18 +212,18 @@ export function ProductDetail() {
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="text-4xl font-bold text-[#374151]">
-                    R$ {product.price.toFixed(2)}
+                    {formatPrice(product.price)}
                   </span>
                   {product.original_price && product.original_price > product.price && (
                     <span className="text-xl text-gray-500 line-through">
-                      R$ {product.original_price.toFixed(2)}
+                      {formatPrice(product.original_price)}
                     </span>
                   )}
                 </div>
                 
                 {discount > 0 && (
                   <div className="text-green-600 font-medium">
-                    Economia de R$ {(product.original_price! - product.price).toFixed(2)}
+                    Economia de {formatPrice(product.original_price! - product.price)}
                   </div>
                 )}
               </div>

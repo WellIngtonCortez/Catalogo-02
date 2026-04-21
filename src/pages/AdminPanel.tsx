@@ -5,16 +5,15 @@ import { ProductService } from '../services/productService'
 import { AnalyticsService } from '../services/analyticsService'
 import { UploadService } from '../services/uploadService'
 import { Product, ProductStats } from '../services/supabase'
+import { formatPrice, parsePrice } from '../utils/format'
 import { ShoppingBag, Edit, Trash2, BarChart3, LogOut, Plus, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
 import logoWellshop from '../assets/logo_wellshop.png'
 
-import { User } from '@supabase/supabase-js'
-
 export function AdminPanel() {
   const navigate = useNavigate()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState<Product[]>([])
   const [stats, setStats] = useState<ProductStats[]>([])
@@ -120,15 +119,15 @@ export function AdminPanel() {
     setStoreError(false)
     
     try {
-      const productData = {
+      const productData: any = {
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
-        original_price: formData.original_price ? parseFloat(formData.original_price) : undefined,
+        price: parsePrice(formData.price),
+        original_price: formData.original_price ? parsePrice(formData.original_price) : null,
         image_url: formData.image_url,
         affiliate_link: formData.affiliate_link,
-        store: formData.store as 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress',
-        store_type: formData.store_type as 'shopee' | 'amazon' | 'mercado_livre' | 'aliexpress',
+        store: formData.store === 'mercado_livre' ? 'mercadolivre' : formData.store,
+        store_type: formData.store_type,
         category: formData.category,
         rating: parseFloat(formData.rating) || 0,
         rating_count: parseInt(formData.rating_count) || 0,
@@ -136,26 +135,30 @@ export function AdminPanel() {
         active: formData.active
       }
 
+      let error;
+
       if (editingId) {
         // Atualizar produto
         const { error: updateError } = await supabase
           .from('products')
           .update(productData)
           .eq('id', editingId)
-          
-        if (updateError) throw updateError
-        
-        toast.success('Produto atualizado com sucesso!')
+        error = updateError;
       } else {
         // Criar produto
         const { error: insertError } = await supabase
           .from('products')
           .insert(productData)
-          
-        if (insertError) throw insertError
-        
-        toast.success('Produto criado com sucesso!')
+        error = insertError;
       }
+
+      if (error) {
+        console.error('Supabase error:', error);
+        toast.error(`Erro ao salvar: ${error.message || 'Erro desconhecido'}`);
+        return;
+      }
+
+      toast.success(editingId ? 'Produto atualizado com sucesso!' : 'Produto criado com sucesso!');
 
       // Resetar formulário
       setFormData({
@@ -178,9 +181,9 @@ export function AdminPanel() {
       
       // Recarregar produtos
       loadProducts()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving product:', error)
-      toast.error('Erro ao salvar produto')
+      toast.error('Erro ao salvar produto: ' + (error.message || 'Verifique os dados'))
     }
   }
 
@@ -208,30 +211,41 @@ export function AdminPanel() {
     if (!confirm('Tem certeza que deseja excluir este produto?')) return
 
     try {
-      // Deletar imagem do storage
-      if (imageUrl) {
-        await UploadService.deleteProductImage(imageUrl)
+      // Deletar imagem do storage (opcional, não bloqueia se falhar)
+      if (imageUrl && !imageUrl.startsWith('http')) {
+        try {
+          await UploadService.deleteProductImage(imageUrl)
+        } catch (err) {
+          console.warn('Could not delete image from storage:', err)
+        }
       }
 
       // Deletar produto do banco
-      await supabase
+      const { error } = await supabase
         .from('products')
         .delete()
         .eq('id', id)
 
+      if (error) {
+        throw error
+      }
+
       toast.success('Produto excluído com sucesso!')
       loadProducts()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting product:', error)
-      toast.error('Erro ao excluir produto')
+      toast.error('Erro ao excluir produto: ' + (error.message || 'Tente novamente'))
     }
   }
 
   const getStoreName = (store: string) => {
-    switch (store) {
+    const s = store?.toLowerCase()
+    switch (s) {
       case 'shopee': return 'Shopee'
       case 'amazon': return 'Amazon'
-      case 'mercado_livre': return 'Mercado Livre'
+      case 'mercado_livre':
+      case 'mercadolivre': return 'Mercado Livre'
+      case 'aliexpress': return 'AliExpress'
       default: return store
     }
   }
@@ -597,7 +611,7 @@ export function AdminPanel() {
                     
                     <div className="flex-1">
                       <h3 className="font-medium text-[#374151]">{product.name}</h3>
-                      <p className="text-sm text-gray-600">R$ {product.price.toFixed(2)}</p>
+                      <p className="text-sm text-gray-600">{formatPrice(product.price)}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs px-2 py-1 bg-gray-100 rounded-lg">
                           {getStoreName(product.store)}

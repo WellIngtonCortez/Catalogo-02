@@ -1,4 +1,5 @@
 import { Product } from '../services/supabase'
+import { formatPrice } from '../utils/format'
 import { Flame, MoreHorizontal } from 'lucide-react'
 import shopeeLogo from '../assets/shopee.png'
 import amazonLogo from '../assets/amazon.png'
@@ -16,20 +17,24 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     : 0
 
   const getStoreLogo = () => {
-    switch (product.store) {
+    const store = product.store?.toLowerCase()
+    switch (store) {
       case 'shopee': return shopeeLogo
       case 'amazon': return amazonLogo
-      case 'mercado_livre': return mercadolivreLogo
+      case 'mercado_livre':
+      case 'mercadolivre': return mercadolivreLogo
       case 'aliexpress': return aliexpressLogo
       default: return shopeeLogo
     }
   }
 
   const getStoreColor = () => {
-    switch (product.store) {
+    const store = product.store?.toLowerCase()
+    switch (store) {
       case 'shopee': return 'border-orange-100 hover:border-orange-500 shadow-orange-500/10'
       case 'amazon': return 'border-yellow-100 hover:border-yellow-500 shadow-yellow-500/10'
-      case 'mercado_livre': return 'border-blue-100 hover:border-blue-500 shadow-blue-500/10'
+      case 'mercado_livre':
+      case 'mercadolivre': return 'border-blue-100 hover:border-blue-500 shadow-blue-500/10'
       default: return 'border-gray-100 hover:border-gray-500 shadow-gray-500/10'
     }
   }
@@ -95,23 +100,22 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
           {product.name}
         </h3>
 
-        {/* Price Section */}
-        <div className="mt-auto pt-1">
-          <div className="flex flex-col">
-             <div className="flex items-baseline gap-1">
-                <span className="text-sm md:text-lg font-bold text-[#e11d48]">
-                   R${product.price.toFixed(2).replace('.', ',')}
+         <div className="mt-auto pt-1">
+           <div className="flex flex-col">
+              <div className="flex items-baseline gap-1">
+                 <span className="text-sm md:text-lg font-bold text-[#e11d48]">
+                    {formatPrice(product.price)}
+                 </span>
+                 <span className="text-[10px] md:text-xs text-gray-500 font-medium">no Pix</span>
+              </div>
+              
+              {product.original_price && product.original_price > product.price && (
+                <span className="text-[10px] text-gray-400 line-through -mt-1 hidden md:block">
+                  {formatPrice(product.original_price)}
                 </span>
-                <span className="text-[10px] md:text-xs text-gray-500 font-medium">no Pix</span>
-             </div>
-             
-             {product.original_price && product.original_price > product.price && (
-               <span className="text-[10px] text-gray-400 line-through -mt-1 hidden md:block">
-                 R$ {product.original_price.toFixed(2).replace('.', ',')}
-               </span>
-             )}
-          </div>
-        </div>
+              )}
+           </div>
+         </div>
 
         {/* Bottom Info: Sold & More like image */}
         <div className="flex items-center justify-between mt-1 pt-2 border-t border-gray-50">

@@ -3,12 +3,14 @@ import { supabase, Click } from './supabase'
 export class AnalyticsService {
   static async trackClick(productId: string): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('clicks')
-        .insert({ product_id: productId })
+      // Chama a RPC 'increment_click' para registrar o clique com segurança
+      // A função SQL usa SECURITY DEFINER para permitir inserção mesmo para usuários anônimos
+      const { error } = await supabase.rpc('increment_click', { 
+        p_product_id: productId 
+      })
 
       if (error) {
-        console.error('Error tracking click:', error)
+        console.error('Error tracking click via RPC:', error)
       }
     } catch (error) {
       console.error('Error tracking click:', error)

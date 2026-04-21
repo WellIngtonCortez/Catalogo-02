@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import { ProductService } from './services/productService'
 import { AnalyticsService } from './services/analyticsService'
 import { ProductCard } from './components/ProductCard'
@@ -22,6 +22,7 @@ import { Footer } from './components/Footer'
 import { FeaturedCarousel } from './components/FeaturedCarousel'
 
 function App() {
+  const navigate = useNavigate()
   const [products, setProducts] = useState<Product[]>([])
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [flashSaleProducts, setFlashSaleProducts] = useState<Product[]>([])
@@ -96,14 +97,8 @@ function App() {
     }
   }
 
-  const handleProductClick = async (product: Product) => {
-    try {
-      await AnalyticsService.trackClick(product.id)
-      window.open(product.affiliate_link, '_blank', 'noopener,noreferrer')
-    } catch (error) {
-      console.error('Error tracking click:', error)
-      window.open(product.affiliate_link, '_blank', 'noopener,noreferrer')
-    }
+  const handleProductClick = (product: Product) => {
+    navigate(`/product/${product.id}`)
   }
 
   const stores = [

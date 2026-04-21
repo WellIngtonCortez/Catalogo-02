@@ -15,7 +15,7 @@ export function Header({ logo }: HeaderProps) {
               <img
                 src={logo}
                 alt="Logo"
-                className="w-20 h-8 md:w-24 md:h-10 rounded-xl object-contain transition-all duration-300 group-hover:scale-110 shadow-sm border border-gray-100"
+                className="w-24 h-10 md:w-32 md:h-12 rounded-xl object-contain transition-all duration-300 group-hover:scale-110 shadow-sm border border-gray-100"
               />
             </Link>
           </div>

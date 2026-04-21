@@ -46,3 +46,12 @@ export interface ProductStats {
   name: string
   total_clicks: number
 }
+
+export interface Review {
+  id: string
+  product_id: string
+  user_name: string
+  comment: string
+  rating: number
+  created_at: string
+}

@@ -118,4 +118,25 @@ export class ProductService {
     if (error) throw error
     return data
   }
+
+  static async getProductReviews(productId: string, limit: number = 3): Promise<any[]> {
+    try {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('product_id', productId)
+        .order('created_at', { ascending: false })
+        .limit(limit)
+
+      if (error) {
+        // Se a tabela não existir, retorna um array vazio silenciosamente
+        if (error.code === '42P01') return []
+        throw error
+      }
+      return data || []
+    } catch (error) {
+      console.error('Error fetching reviews:', error)
+      return []
+    }
+  }
 }
