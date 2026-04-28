@@ -35,6 +35,7 @@ export function AdminPanel() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [storeError, setStoreError] = useState(false)
+  const [isFetchingData, setIsFetchingData] = useState(false)
 
   useEffect(() => {
     checkAuth()
@@ -103,6 +104,231 @@ export function AdminPanel() {
       toast.error('Erro ao enviar imagem')
     } finally {
       setUploading(false)
+    }
+  }
+
+  const fetchProductData = async (url: string) => {
+    try {
+      setIsFetchingData(true)
+
+      // ─── LAYER 0: Fetch via Microlink (OG + Meta + structured data) ────────────
+      const mlResponse = await fetch(
+        `https://api.microlink.io?url=${encodeURIComponent(url)}&palette=true&audio=true&video=true&iframe=true`
+      )
+      const mlResult = await mlResponse.json()
+      if (mlResult.status !== 'success' || !mlResult.data) {
+        throw new Error('Microlink não retornou dados válidos')
+      }
+      const ml = mlResult.data
+      const rawHtml = ml.html || ''
+
+      // ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+      /** Normaliza preço para float string: "R$ 1.250,99" → "1250.99" */
+      const normalizePrice = (raw: any): string => {
+        if (!raw) return ''
+        const s = String(raw).replace(/[^\d,.]/g, '')
+        const lastComma = s.lastIndexOf(',')
+        const lastDot   = s.lastIndexOf('.')
+        if (lastComma > lastDot) return s.replace(/\./g, '').replace(',', '.')   // BR: 1.250,99
+        if (lastDot > lastComma) return s.replace(/,/g, '')                      // US: 1,250.99
+        return s.replace(',', '.')
+      }
+
+      /** Extrai primeiro número limpo de uma string de texto */
+      const extractNumber = (s: string): string => {
+        const m = s.replace(/[^\d]/g, '')
+        return m.length > 0 && m.length <= 6 ? m : ''
+      }
+
+      /** Mapeamento inteligente de categoria por palavras-chave */
+      const mapCategory = (text: string): string => {
+        const t = text.toLowerCase()
+        if (/iphone|samsung|xiaomi|celular|smartphone/.test(t)) return 'Celulares'
+        if (/fone|airpods|headset|beatS|jbl|speaker/.test(t)) return 'Áudio'
+        if (/teclado|mouse|monitor|gamer|notebook|pc|headset gamer/.test(t)) return 'Informática'
+        if (/tv|televisão|televisor|smart tv/.test(t)) return 'TVs'
+        if (/geladeira|fogão|microondas|máquina de lavar|eletrodoméstico/.test(t)) return 'Eletrodomésticos'
+        if (/cachorro|gato|ração|pet|coleira|aquário/.test(t)) return 'Pets'
+        if (/vestido|camisa|camiseta|calça|sapato|tênis|moda|roupa/.test(t)) return 'Moda'
+        if (/bolsa|mochila|mala|carteira/.test(t)) return 'Bolsas e Malas'
+        if (/relógio|joias|anel|brinco/.test(t)) return 'Joias e Relógios'
+        if (/cozinha|panela|frigideira|utensílio/.test(t)) return 'Cozinha'
+        if (/sofá|cama|travesseiro|edredom|colchão|móvel/.test(t)) return 'Casa e Decoração'
+        if (/maquiagem|batom|skincare|perfume|protetor solar/.test(t)) return 'Beleza e Saúde'
+        if (/brinquedo|boneca|lego|quebra-cabeça|infantil/.test(t)) return 'Brinquedos'
+        if (/livro|literatura|romance|mangá/.test(t)) return 'Livros'
+        if (/suplemento|whey|creatina|vitamina|academia/.test(t)) return 'Esporte e Saúde'
+        return 'Geral'
+      }
+
+      // ─── LAYER 1: JSON-LD Parser ─────────────────────────────────────────────────
+      // Mercado Livre, Amazon e Shopee encapsulam preço e rating em scripts ld+json
+      let ldPrice = '', ldOriginalPrice = '', ldRating = '', ldReviewCount = ''
+      const ldMatches = rawHtml.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)
+      for (const match of ldMatches) {
+        try {
+          const json = JSON.parse(match[1])
+          const entries = Array.isArray(json) ? json : [json]
+          for (const entry of entries) {
+            // Preço via Offers
+            const offers = entry.offers || entry.Offers
+            if (offers) {
+              const offer = Array.isArray(offers) ? offers[0] : offers
+              if (offer.price && !ldPrice) ldPrice = String(offer.price)
+              if (offer.highPrice && !ldOriginalPrice) ldOriginalPrice = String(offer.highPrice)
+            }
+            // Rating via AggregateRating
+            const aggRating = entry.aggregateRating || entry.AggregateRating
+            if (aggRating) {
+              if (aggRating.ratingValue && !ldRating) ldRating = String(aggRating.ratingValue)
+              if (aggRating.reviewCount && !ldReviewCount) ldReviewCount = String(aggRating.reviewCount)
+              if (aggRating.ratingCount && !ldReviewCount) ldReviewCount = String(aggRating.ratingCount)
+            }
+          }
+        } catch { /* JSON inválido — ignora */ }
+      }
+
+      // ─── LAYER 2: Seletores Específicos por Domínio (Regex no HTML) ─────────────
+      const lowerUrl = url.toLowerCase()
+      let domainPrice = '', domainOriginalPrice = '', domainRating = '', domainReviewCount = ''
+
+      if (lowerUrl.includes('amazon')) {
+        // Amazon: .a-price-whole | .a-price-fraction
+        const amzPriceM = rawHtml.match(/class="a-price-whole">([^<]+)<\/span>\s*<span[^>]*class="a-price-fraction">([^<]+)/)
+        if (amzPriceM) domainPrice = `${amzPriceM[1].replace(/[^\d]/g, '')}.${amzPriceM[2].replace(/[^\d]/g, '')}`
+
+        // Amazon: #acrCustomerReviewText "1.250 avaliações"
+        const amzReviewM = rawHtml.match(/id="acrCustomerReviewText"[^>]*>([\d.,]+)\s/)
+        if (amzReviewM) domainReviewCount = amzReviewM[1].replace(/[.,]/g, '')
+
+        // Amazon: i.a-star-small-X-5 → nota
+        const amzRatingM = rawHtml.match(/a-star-(?:small-)?(\d)-(\d)/)
+        if (amzRatingM) domainRating = `${amzRatingM[1]}.${amzRatingM[2]}`
+
+      } else if (lowerUrl.includes('mercadolivre') || lowerUrl.includes('meli.la')) {
+        // ML: .andes-money-amount__fraction
+        const mlPriceM = rawHtml.match(/andes-money-amount__fraction[^>]*>([^<]+)<\/span>/)
+        if (mlPriceM) {
+          const mlFractionM = rawHtml.match(/andes-money-amount__cents[^>]*>([^<]+)<\/span>/)
+          domainPrice = `${mlPriceM[1].replace(/[^\d]/g, '')}.${mlFractionM ? mlFractionM[1] : '00'}`
+        }
+        // ML: .ui-pdp-review__rating
+        const mlRatingM = rawHtml.match(/ui-pdp-review__rating[^>]*>([\d,]+)</)
+        if (mlRatingM) domainRating = mlRatingM[1].replace(',', '.')
+
+        // ML: .ui-pdp-review__amount "(1.250)"
+        const mlCountM = rawHtml.match(/ui-pdp-review__amount[^>]*>\(?([\d.,]+)\)?</)
+        if (mlCountM) domainReviewCount = mlCountM[1].replace(/[.,]/g, '')
+
+      } else if (lowerUrl.includes('shopee') || lowerUrl.includes('shope.ee')) {
+        // Shopee: data-e2e atributos ou classes de preço
+        const spPriceM = rawHtml.match(/product-price[^>]*>([\d.,]+)</)
+        if (spPriceM) domainPrice = normalizePrice(spPriceM[1])
+
+        const spRatingM = rawHtml.match(/shopee-rating[^>]*>([\d.]+)</)
+        if (spRatingM) domainRating = spRatingM[1]
+
+      } else if (lowerUrl.includes('aliexpress')) {
+        // AliExpress mantém preços em JSON dentro da página
+        const aliPriceM = rawHtml.match(/"price":\s?"USD\s?([\d.]+)"/)
+        if (aliPriceM) domainPrice = aliPriceM[1]
+
+        const aliRatingM = rawHtml.match(/"averageStar":\s?"([\d.]+)"/)
+        if (aliRatingM) domainRating = aliRatingM[1]
+
+        const aliCountM = rawHtml.match(/"totalValidNum":\s?(\d+)/)
+        if (aliCountM) domainReviewCount = aliCountM[1]
+      }
+
+      // ─── LAYER 3: Regex Geral no searchString (Fallback Final) ──────────────────
+      const searchString = `${ml.title || ''} ${ml.description || ''} ${rawHtml}`
+
+      const priceFromRegex = (): string => {
+        const m = searchString.match(/(?:R\$|US\$|\$)\s?(\d{1,3}(?:[.,]\d{3})*[.,]\d{2})/)
+        return m ? normalizePrice(m[1]) : ''
+      }
+
+      const ratingFromRegex = (): string => {
+        const m = searchString.match(/(\d[.,]\d+)\s?(?:estrelas?|de 5|stars?|out of 5|★)/i)
+        return m ? m[1].replace(',', '.') : ''
+      }
+
+      const reviewCountFromRegex = (): string => {
+        const m = searchString.match(/(?:\(|\b)(\d{1,3}(?:[.,]\d{3})?)\s?(?:avaliaç|opini|ratings?|reviews?|comentários?)/i)
+        return m ? extractNumber(m[1]) : ''
+      }
+
+      // ─── PRIORIDADE FINAL: JSON-LD > DOM Seletores > Regex > Defaults ────────────
+      const finalPrice        = normalizePrice(ldPrice       || domainPrice        || ml.price || priceFromRegex())
+      const finalOrigPrice    = normalizePrice(ldOriginalPrice || domainOriginalPrice)
+      const finalRatingRaw    = ldRating      || domainRating      || ratingFromRegex()
+      const finalReviewRaw    = ldReviewCount || domainReviewCount || reviewCountFromRegex()
+
+      // Normaliza rating 0-5 (fallback inteligente: 5.0)
+      let finalRating = finalRatingRaw ? String(Math.min(parseFloat(finalRatingRaw), 5)) : '5.0'
+
+      // Nº de avaliações mínimo de 100 como fallback
+      let finalReviewCount = finalReviewRaw || '100'
+
+      // Título com validação anti-placeholder
+      let title = ml.title || ''
+      if (/^[a-zA-Z0-9-]+\.[a-z]{2,}$/.test(title) || title.length < 5 || title.toLowerCase().includes('perfil social')) {
+        const fallbackTitle = ml.description?.match(/^([^.|!?]*)/)
+        if (fallbackTitle && fallbackTitle[1].length > 10) title = fallbackTitle[1].trim()
+      }
+
+      // Categoria inteligente
+      const category = mapCategory(`${title} ${ml.description || ''}`)
+
+      // ─── Atualiza o formulário ─────────────────────────────────────────────────
+      setFormData(prev => ({
+        ...prev,
+        name:           title              || prev.name,
+        description:    ml.description     || prev.description,
+        price:          finalPrice         || prev.price,
+        original_price: finalOrigPrice     || prev.original_price,
+        category:       category           || prev.category,
+        rating:         finalRating        || prev.rating,
+        rating_count:   finalReviewCount   || prev.rating_count,
+        image_url:      ml.image?.url      || prev.image_url,
+        affiliate_link:  url
+      }))
+
+      toast.success(`✅ ${title ? title.slice(0, 30) + '…' : 'Produto'} extraído com sucesso!`)
+    } catch (error) {
+      console.error('[WelShop] Erro na extração de produto:', error)
+      toast.error('Não foi possível extrair os dados. Preencha manualmente.')
+    } finally {
+      setIsFetchingData(false)
+    }
+  }
+
+  const handleUrlChange = (url: string) => {
+    const lowerUrl = url.toLowerCase()
+    let detectedStore = ''
+    
+    // Detecta a loja automaticamente
+    if (lowerUrl.includes('amazon') || lowerUrl.includes('amzn.to')) detectedStore = 'amazon'
+    else if (lowerUrl.includes('shopee') || lowerUrl.includes('shope.ee')) detectedStore = 'shopee'
+    else if (lowerUrl.includes('aliexpress') || lowerUrl.includes('ali.express')) detectedStore = 'aliexpress'
+    else if (lowerUrl.includes('mercadolivre') || lowerUrl.includes('meli.la') || lowerUrl.includes('mercado_livre')) detectedStore = 'mercado_livre'
+
+    setFormData(prev => {
+      const newData = { ...prev, affiliate_link: url }
+      if (detectedStore) {
+        newData.store_type = detectedStore
+        newData.store = (detectedStore === 'mercado_livre' ? 'mercadolivre' : detectedStore) as any
+      }
+      return newData
+    })
+    
+    // Dispara busca para qualquer uma das lojas suportadas
+    const supportedStores = ['amazon', 'shopee', 'aliexpress', 'mercadolivre', 'mercado_livre', 'meli.la', 'amzn.to', 'shope.ee']
+    const isSupported = supportedStores.some(store => lowerUrl.includes(store))
+    
+    if (isSupported && url.startsWith('http')) {
+      fetchProductData(url)
     }
   }
 
@@ -510,10 +736,19 @@ export function AdminPanel() {
                     type="url"
                     required
                     value={formData.affiliate_link}
-                    onChange={(e) => setFormData(prev => ({ ...prev, affiliate_link: e.target.value }))}
+                    onChange={(e) => handleUrlChange(e.target.value)}
+                    onPaste={(e) => {
+                      const pastedUrl = e.clipboardData.getData('text')
+                      handleUrlChange(pastedUrl)
+                    }}
                     placeholder="https://..."
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 placeholder-gray-400 bg-gray-50/50 hover:bg-white transition-all font-medium"
                   />
+                  {isFetchingData && (
+                    <p className="mt-1 text-[10px] font-bold text-purple-600 animate-pulse">
+                      ✨ Buscando dados do produto...
+                    </p>
+                  )}
                 </div>
 
                 <div>
