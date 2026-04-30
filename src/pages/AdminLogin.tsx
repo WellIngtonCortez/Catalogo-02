@@ -45,14 +45,12 @@ export function AdminLogin() {
     <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#2563eb] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <ShoppingBag className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-[#374151]">
-            Uni<span className="text-blue-600">Shop</span>Br Admin
-          </h1>
-          <p className="text-gray-600 mt-2">Faça login para gerenciar seu catálogo</p>
+        <div className="text-center mb-10">
+          <img 
+            src="/src/assets/logomarcadeinicializção.png" 
+            alt="UniShopBr" 
+            className="h-24 mx-auto object-contain transition-all hover:scale-105"
+          />
         </div>
 
         {/* Login Form */}
@@ -69,7 +67,7 @@ export function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-opacity-20 transition-all duration-200"
-                placeholder="admin@wellshop.com"
+                placeholder="admin@unishopbr.com"
                 required
                 autoComplete="email"
               />

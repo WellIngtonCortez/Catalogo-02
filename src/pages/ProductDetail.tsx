@@ -8,7 +8,7 @@ import { formatPrice } from '../utils/format'
 import { Star, ShoppingBag, Flame, Tag, ArrowLeft, ExternalLink } from 'lucide-react'
 import { toast } from 'sonner'
 
-import logoWellshop from '../assets/logo_wellshop.png'
+import logoUniShopBr from '../assets/logo_unishopbr.png'
 
 export function ProductDetail() {
   const { id } = useParams<{ id: string }>()
@@ -127,7 +127,7 @@ export function ProductDetail() {
   return (
     <>
       <Helmet>
-        <title>{product.name} - WellShop</title>
+        <title>{product.name} - UniShopBr</title>
         <meta name="description" content={product.description} />
         <meta property="og:title" content={product.name} />
         <meta property="og:description" content={product.description} />
@@ -163,7 +163,7 @@ export function ProductDetail() {
               </div>
 
                 <div className="flex items-center gap-2">
-                  <img src={logoWellshop} alt="WellShop" className="h-8 w-auto object-contain" />
+                  <img src={logoUniShopBr} alt="UniShopBr" className="h-8 w-auto object-contain" />
                 </div>
             </div>
           </div>

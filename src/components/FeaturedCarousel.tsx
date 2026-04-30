@@ -33,25 +33,27 @@ export function FeaturedCarousel({ products, title, subtitle, onProductClick }: 
     <section className="py-12 lg:py-16 bg-[#FAFAFA]/50 overflow-hidden relative group">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-          <div className="flex flex-col gap-3 relative">
-            <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-1 h-10 bg-blue-600 rounded-full"></div>
-            <div className="flex items-center gap-2">
-              <div className="flex bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100 text-blue-600">
-                <Star className="w-3.5 h-3.5 fill-blue-600 mr-1.5" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Destaques</span>
+          {title && (
+            <div className="flex flex-col gap-3 relative">
+              <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-1 h-10 bg-blue-600 rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100 text-blue-600">
+                  <Star className="w-3.5 h-3.5 fill-blue-600 mr-1.5" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Destaques</span>
+                </div>
+                <div className="flex bg-orange-50 px-2.5 py-0.5 rounded-lg border border-orange-100 text-orange-600">
+                  <Flame className="w-3.5 h-3.5 fill-orange-600 mr-1.5" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Ofertas</span>
+                </div>
               </div>
-              <div className="flex bg-orange-50 px-2.5 py-0.5 rounded-lg border border-orange-100 text-orange-600">
-                <Flame className="w-3.5 h-3.5 fill-orange-600 mr-1.5" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Ofertas</span>
-              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{title}</h2>
+              {subtitle && (
+                <p className="text-gray-500 max-w-lg leading-relaxed text-sm md:text-base">
+                  {subtitle}
+                </p>
+              )}
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 tracking-tight">{title}</h2>
-            {subtitle && (
-              <p className="text-gray-500 max-w-lg leading-relaxed text-sm md:text-base">
-                {subtitle}
-              </p>
-            )}
-          </div>
+          )}
 
           <div className="flex gap-2">
             <button

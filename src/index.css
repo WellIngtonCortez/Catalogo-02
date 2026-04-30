@@ -4,25 +4,37 @@
 
 @layer base {
   body {
-    @apply bg-[#FAFAFA] text-[#374151] font-sans antialiased;
+    @apply bg-white text-[#1A2B4C] font-sans antialiased selection:bg-[#F27121]/20;
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-lg;
+  .glass-header {
+    @apply bg-white/70 backdrop-blur-md border-b border-gray-200/20 sticky top-0 z-50 transition-all duration-500;
+  }
+
+  .premium-card {
+    @apply bg-white rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl hover:shadow-[#1A2B4C]/5 hover:-translate-y-2 overflow-hidden;
   }
   
-  .premium-gradient {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  .btn-primary {
+    @apply bg-[#F27121] text-white px-6 py-3 rounded-2xl font-bold transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-[#F27121]/20 hover:shadow-[#F27121]/40 flex items-center justify-center gap-2;
   }
 
-  .text-premium-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600;
+  .btn-secondary {
+    @apply bg-[#1A2B4C] text-white px-6 py-3 rounded-2xl font-bold transition-all duration-300 hover:bg-[#1A2B4C]/90 active:scale-95 shadow-lg shadow-[#1A2B4C]/10;
   }
 
-  .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  .text-brand-primary {
+    @apply text-[#F27121];
+  }
+
+  .text-brand-secondary {
+    @apply text-[#1A2B4C];
+  }
+
+  .bg-brand-soft {
+    @apply bg-[#F8FAFC];
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -35,14 +47,14 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-pulse-slow {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

@@ -1,6 +1,6 @@
 import { Product } from '../services/supabase'
 import { formatPrice } from '../utils/format'
-import { Flame, MoreHorizontal } from 'lucide-react'
+import { ExternalLink, Star } from 'lucide-react'
 import shopeeLogo from '../assets/shopee.png'
 import amazonLogo from '../assets/amazon.png'
 import mercadolivreLogo from '../assets/mercadolivre.png'
@@ -28,103 +28,80 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     }
   }
 
-  const getStoreColor = () => {
-    const store = product.store?.toLowerCase()
-    switch (store) {
-      case 'shopee': return 'border-orange-100 hover:border-orange-500 shadow-orange-500/10'
-      case 'amazon': return 'border-yellow-100 hover:border-yellow-500 shadow-yellow-500/10'
-      case 'mercado_livre':
-      case 'mercadolivre': return 'border-blue-100 hover:border-blue-500 shadow-blue-500/10'
-      default: return 'border-gray-100 hover:border-gray-500 shadow-gray-500/10'
-    }
-  }
-
   return (
     <div 
-      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer overflow-hidden flex flex-col h-full border border-gray-100"
+      className="premium-card group h-full flex flex-col"
       onClick={() => onClick?.(product)}
     >
-      {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+      <div className="relative aspect-square overflow-hidden bg-white">
+        {/* Glow Effect */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-orange-100/20 via-transparent to-blue-100/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-brand-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        
         <img
           src={product.image_url}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="relative z-10 w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
         />
         
-        {/* Discount Badge - Top Right */}
-        {discount > 0 && (
-          <div className="absolute top-0 right-0 z-20 bg-[#e11d48]/10 backdrop-blur-md text-[#e11d48] px-2 py-1 rounded-bl-xl text-[10px] md:text-xs font-black border-l border-b border-rose-100 shadow-sm">
-            {discount}% OFF
-          </div>
-        )}
-
-        {/* Store Logo - Top Left for separation */}
-        <div className="absolute top-2 left-2 z-20 pointer-events-none select-none transition-all duration-300">
-           <div className={`p-1 bg-white rounded-xl shadow-md border ${getStoreColor()} flex items-center justify-center w-10 h-10 md:w-12 md:h-12 overflow-hidden ring-2 ring-white/50`}>
+        {/* Floating Store Badge - Discreto e Elegante */}
+        <div className="absolute top-4 left-4 z-20">
+           <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-2xl shadow-soft border border-white/50 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
              <img src={getStoreLogo() || ''} alt={product.store} className="w-full h-full object-contain" />
             </div>
         </div>
 
-        {/* Destaque Badge - Bottom Left */}
-        {product.featured && (
-          <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1.5 bg-blue-600/90 text-white px-2.5 py-1 rounded-full shadow-lg shadow-blue-600/20 border border-blue-400">
-             <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-             <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Destaque</span>
-          </div>
-        )}
-
-        {/* Flash Sale Badge - Bottom Right */}
-        {product.flash_sale && (
-          <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1.5 bg-orange-500/90 text-white px-2.5 py-1 rounded-full shadow-lg shadow-orange-600/20 border border-orange-400">
-             <Flame className="w-3 h-3 fill-white" />
-             <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-none">Oferta</span>
+        {/* Discount Tag - Estilo Apple */}
+        {discount > 0 && (
+          <div className="absolute top-4 right-4 z-20 bg-brand-primary text-white px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold shadow-lg shadow-brand-primary/20">
+            -{discount}%
           </div>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-3 md:p-4 flex flex-col flex-1 gap-1.5 md:gap-2">
-        {/* Featured / Indicado Badge from image */}
-        {product.featured && (
-          <div className="flex">
-            <span className="bg-[#e11d48] text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">
-              Indicado
-            </span>
+      <div className="p-5 md:p-6 flex flex-col flex-1 gap-3">
+        {/* Category & Stats */}
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">
+            {product.category}
+          </span>
+          <div className="flex items-center gap-1 text-gray-400">
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            <span className="text-[10px] md:text-xs font-medium">{product.rating}</span>
           </div>
-        )}
+        </div>
 
-        {/* Title */}
-        <h3 className="text-[#374151] text-xs md:text-sm font-medium line-clamp-2 leading-snug min-h-[2.5rem] md:min-h-[2.8rem]">
+        {/* Title - Navy #1A2B4C */}
+        <h3 className="text-brand-secondary text-sm md:text-base font-semibold line-clamp-2 leading-snug min-h-[3rem]">
           {product.name}
         </h3>
 
-         <div className="mt-auto pt-1">
-           <div className="flex flex-col">
-              <div className="flex items-baseline gap-1">
-                 <span className="text-sm md:text-lg font-bold text-[#e11d48]">
-                    {formatPrice(product.price)}
-                 </span>
-                 <span className="text-[10px] md:text-xs text-gray-500 font-medium">no Pix</span>
-              </div>
-              
-              {product.original_price && product.original_price > product.price && (
-                <span className="text-[10px] text-gray-400 line-through -mt-1 hidden md:block">
-                  {formatPrice(product.original_price)}
-                </span>
-              )}
-           </div>
-         </div>
+        <div className="mt-auto space-y-4">
+          {/* Price Container */}
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl md:text-2xl font-extrabold text-brand-primary">
+              {formatPrice(product.price)}
+            </span>
+            {product.original_price && product.original_price > product.price && (
+              <span className="text-xs md:text-sm text-gray-300 line-through font-medium">
+                {formatPrice(product.original_price)}
+              </span>
+            )}
+          </div>
 
-        {/* Bottom Info: Sold & More like image */}
-        <div className="flex items-center justify-between mt-1 pt-2 border-t border-gray-50">
-           <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
-             {product.rating_count} vendidos
-           </span>
-           <button className="text-gray-300 hover:text-gray-500 transition-colors p-1">
-             <MoreHorizontal className="w-4 h-4 md:w-5 h-5" />
-           </button>
+          {/* Action Button - Orange #F27121 */}
+          <button 
+            className="btn-primary w-full text-xs md:text-sm py-3.5"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClick?.(product);
+            }}
+          >
+            <span>Ver Oferta</span>
+            <ExternalLink className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

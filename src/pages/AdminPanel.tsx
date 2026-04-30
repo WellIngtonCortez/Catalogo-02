@@ -9,7 +9,7 @@ import { formatPrice, parsePrice } from '../utils/format'
 import { ShoppingBag, Edit, Trash2, BarChart3, LogOut, Plus, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
-import logoWellshop from '../assets/logo_wellshop.png'
+import logoUniShopBr from '../assets/logo_unishopbr.png'
 
 export function AdminPanel() {
   const navigate = useNavigate()
@@ -492,11 +492,10 @@ export function AdminPanel() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img 
-                src={logoWellshop} 
-                alt="WellShop" 
-                className="w-8 h-8 object-contain"
+                src="/src/assets/logomarcadeinicializção.png" 
+                alt="UniShopBr Admin" 
+                className="h-10 w-auto object-contain"
               />
-              <h1 className="text-xl font-bold text-[#374151]">Painel Admin</h1>
             </div>
             
             <button
