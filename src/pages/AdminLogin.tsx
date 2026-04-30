@@ -13,7 +13,7 @@ export function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!email || !password) {
       toast.error('Preencha todos os campos')
       return
@@ -46,9 +46,9 @@ export function AdminLogin() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-10">
-          <img 
-            src="/src/assets/logomarcadeinicializção.png" 
-            alt="UniShopBr" 
+          <img
+            src="/src/assets/logomarcadeinicializção.png"
+            alt="UniShopBr"
             className="h-24 mx-auto object-contain transition-all hover:scale-105"
           />
         </div>
@@ -117,7 +117,7 @@ export function AdminLogin() {
               onClick={() => navigate('/')}
               className="text-[#2563eb] hover:text-blue-700 transition-colors text-sm"
             >
-              ← Voltar para o catálogo
+              ← Voltar
             </button>
           </div>
         </div>
