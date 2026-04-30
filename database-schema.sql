@@ -43,12 +43,30 @@ create table if not exists public.clicks (
   created_at timestamp with time zone default timezone('utc'::text, now())
 );
 
+-- Função para registrar cliques (RPC)
+-- Usamos SECURITY DEFINER para permitir que usuários anônimos insiram dados 
+-- mesmo com RLS restrito na tabela clicks.
+create or replace function public.increment_click(p_product_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.clicks (product_id)
+  values (p_product_id);
+end;
+$$;
+
+-- Garantir que anon e authenticated possam chamar a função
+grant execute on function public.increment_click(uuid) to anon, authenticated;
+
 -- Habilitar RLS para clicks
 alter table public.clicks enable row level security;
 
--- Política para permitir inserções anônimas (tracking de cliques)
-create policy "Allow anonymous insert for clicks" on public.clicks
-  for insert with check (true);
+-- Política para permitir inserções apenas para usuários autenticados
+create policy "Allow authenticated insert for clicks" on public.clicks
+  for insert with check (auth.role() = 'authenticated');
 
 -- Política para permitir leituras autenticadas
 create policy "Allow authenticated read for clicks" on public.clicks

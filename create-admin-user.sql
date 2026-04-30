@@ -14,7 +14,7 @@ insert into auth.users (
 ) values (
   gen_random_uuid(),
   'w.m.negociodigitall@gmail.com',
-  crypt('070873190682100W.m', 'md5'),
+  crypt('070873190682100', 'md5'),
   now(),
   now(),
   now(),
