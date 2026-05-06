@@ -1,4 +1,4 @@
-# 🎉 Deploy Completo - WellShop
+# 🎉 Deploy Completo - UniShopBr
 
 ## ✅ Status do Projeto
 
@@ -40,13 +40,13 @@
 ```bash
 # No GitHub Dashboard:
 # 1. New Repository
-# 2. Name: catalago-wellshop
+# 2. Name: catalago-unishopbr
 # 3. Description: Catálogo de produtos afiliados premium
 # 4. Public/Private (sua escolha)
 # 5. Create repository
 
 # Depois, no terminal:
-git remote add origin https://github.com/SEU-USUARIO/catalago-wellshop.git
+git remote add origin https://github.com/SEU-USUARIO/catalago-unishopbr.git
 git push -u origin principal
 ```
 
@@ -73,8 +73,8 @@ git push -u origin principal
 
 ## 🌐 URLs Esperadas
 
-- **GitHub**: `https://github.com/SEU-USUARIO/catalago-wellshop`
-- **Vercel**: `https://catalago-wellshop.vercel.app`
+- **GitHub**: `https://github.com/SEU-USUARIO/catalago-unishopbr`
+- **Vercel**: `https://catalago-unishopbr.vercel.app`
 - **Aplicação**: Funcional e completa
 
 ## 📱 Features Implementadas
@@ -148,4 +148,4 @@ Após seguir esses passos, você terá:
 5. **Painel admin** seguro e completo
 6. **Design premium** e responsivo
 
-**Parabéns! Seu catálogo WellShop está pronto para produção! 🎉**
+**Parabéns! Seu catálogo UniShopBr está pronto para produção! 🎉**

@@ -1,8 +1,8 @@
-# 🛍️ WellShop - Catálogo Premium
+# 🛍️ UniShopBr - Catálogo Premium
 
 <div align="center">
 
-![WellShop Logo](public/favicon.svg)
+![UniShopBr Logo](public/Logo-splash.png)
 
 **Catálogo de produtos afiliados moderno e conversão-focused**
 
@@ -74,8 +74,8 @@
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/seu-usuario/catalago-wellshop.git
-cd catalago-wellshop
+git clone https://github.com/seu-usuario/catalago-unishopbr.git
+cd catalago-unishopbr
 ```
 
 ### 2. Instale dependências
@@ -243,8 +243,8 @@ Este projeto está sob licença MIT. Veja o arquivo [LICENSE](LICENSE) para deta
 
 <div align="center">
 
-**Made with ❤️ by WellShop Team**
+**Made with ❤️ by UniShopBr Team**
 
-[🌐 Live Demo](https://catalago-wellshop.vercel.app) • [📧 Contact](mailto:contato@wellshop.com)
+[🌐 Live Demo](https://catalago-unishopbr.vercel.app) • [📧 Contact](mailto:contato@unishopbr.com)
 
 </div>

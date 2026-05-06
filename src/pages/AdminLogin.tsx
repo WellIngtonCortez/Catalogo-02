@@ -4,6 +4,8 @@ import { supabase } from '../services/supabase'
 import { ShoppingBag, Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 
+import logoSplash from '../assets/logo-splash.png'
+
 export function AdminLogin() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -47,7 +49,7 @@ export function AdminLogin() {
         {/* Logo */}
         <div className="text-center mb-10">
           <img
-            src="/src/assets/logomarcadeinicializção.png"
+            src={logoSplash}
             alt="UniShopBr"
             className="h-24 mx-auto object-contain transition-all hover:scale-105"
           />

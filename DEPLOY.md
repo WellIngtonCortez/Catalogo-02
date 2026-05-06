@@ -1,4 +1,4 @@
-# 🚀 Deploy Instructions - WellShop
+# 🚀 Deploy Instructions - UniShopBr
 
 ## 📋 Pré-requisitos
 
@@ -125,8 +125,8 @@ Acesse `http://localhost:4173` para testar.
 
 Após o deploy, sua aplicação estará disponível em:
 
-- **Produção**: `https://catalago-wellshop.vercel.app`
-- **Staging**: `https://catalago-wellshop-[hash].vercel.app`
+- **Produção**: `https://catalago-unishopbr.vercel.app`
+- **Staging**: `https://catalago-unishopbr-[hash].vercel.app`
 
 ## 🔄 CI/CD Pipeline
 

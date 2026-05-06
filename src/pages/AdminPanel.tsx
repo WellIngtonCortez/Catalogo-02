@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
 import logoUniShopBr from '../assets/logo_unishopbr.png'
 
+import logoSplash from '../assets/logo-splash.png'
+
 export function AdminPanel() {
   const navigate = useNavigate()
   const [user, setUser] = useState<any>(null)
@@ -297,7 +299,7 @@ export function AdminPanel() {
 
       toast.success(`✅ ${title ? title.slice(0, 30) + '…' : 'Produto'} extraído com sucesso!`)
     } catch (error) {
-      console.error('[WelShop] Erro na extração de produto:', error)
+      console.error('[UniShopBr] Erro na extração de produto:', error)
       toast.error('Não foi possível extrair os dados. Preencha manualmente.')
     } finally {
       setIsFetchingData(false)
@@ -492,7 +494,7 @@ export function AdminPanel() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img 
-                src="/src/assets/logomarcadeinicializção.png" 
+                src={logoSplash} 
                 alt="UniShopBr Admin" 
                 className="h-10 w-auto object-contain"
               />

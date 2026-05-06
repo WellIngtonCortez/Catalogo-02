@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Deploy Script para WellShop
+# Deploy Script para UniShopBr
 # Uso: ./deploy.sh [staging|production]
 
 ENVIRONMENT=${1:-production}
 
-echo "🚀 Deployando WellShop para $ENVIRONMENT..."
+echo "🚀 Deployando UniShopBr para $ENVIRONMENT..."
 
 # Verificar se o Vercel CLI está instalado
 if ! command -v vercel &> /dev/null; then
@@ -30,7 +30,7 @@ if [ $? -eq 0 ]; then
     fi
     
     echo "🎉 Deploy concluído!"
-    echo "📱 Acesse a aplicação em: https://catalago-wellshop.vercel.app"
+    echo "📱 Acesse a aplicação em: https://catalago-unishopbr.vercel.app"
 else
     echo "❌ Erro no build. Verifique os logs acima."
     exit 1
