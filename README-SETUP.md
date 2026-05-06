@@ -1,4 +1,4 @@
-# 🛠️ Configuração do Projeto WellShop
+# 🛠️ Configuração do Projeto UniShopBr
 
 ## 📋 Pré-requisitos
 

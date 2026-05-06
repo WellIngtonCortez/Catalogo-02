@@ -1,11 +1,11 @@
 @echo off
-REM Deploy Script para WellShop (Windows)
+REM Deploy Script para UniShopBr (Windows)
 REM Uso: deploy.bat [staging|production]
 
 set ENVIRONMENT=%1
 if "%ENVIRONMENT%"=="" set ENVIRONMENT=production
 
-echo 🚀 Deployando WellShop para %ENVIRONMENT%...
+echo 🚀 Deployando UniShopBr para %ENVIRONMENT%...
 
 REM Verificar se o Vercel CLI está instalado
 vercel --version >nul 2>&1
@@ -31,7 +31,7 @@ if %errorlevel% equ 0 (
     )
     
     echo 🎉 Deploy concluído!
-    echo 📱 Acesse a aplicação em: https://catalago-wellshop.vercel.app
+    echo 📱 Acesse a aplicação em: https://catalago-unishopbr.vercel.app
 ) else (
     echo ❌ Erro no build. Verifique os logs acima.
     exit /b 1

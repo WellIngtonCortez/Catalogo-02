@@ -1,4 +1,4 @@
-# 🎨 Logo WellShop Implementada com Sucesso!
+# 🎨 Logo UniShopBr Implementada com Sucesso!
 
 ## ✅ Alterações Realizadas
 
@@ -8,20 +8,20 @@
 
 ### 🔄 Substituição:
 - **Antes**: Ícone `ShoppingBag` com fundo azul
-- **Depois**: Logo `logo_wellshop.png` original
+- **Depois**: Logo `logo_unishopbr.png` original
 
 ## 🎯 Especificações Técnicas
 
 ### Import da Logo:
 ```typescript
-import logoWellshop from './assets/logo_wellshop.png'
+import logoUniShopBr from './assets/logo_unishopbr.png'
 ```
 
 ### Implementação:
 ```jsx
 <img 
-  src={logoWellshop} 
-  alt="WellShop" 
+  src={logoUniShopBr} 
+  alt="UniShopBr" 
   className="w-8 h-8 object-contain"
 />
 ```
@@ -30,22 +30,22 @@ import logoWellshop from './assets/logo_wellshop.png'
 - **Tamanho**: `w-8 h-8` (32x32px) - mesmo tamanho do anterior
 - **Ajuste**: `object-contain` - mantém proporção sem distorcer
 - **Alinhamento**: Centralizado com gap de 2 do texto
-- **Acessibilidade**: Alt text "WellShop" para screen readers
+- **Acessibilidade**: Alt text "UniShopBr" para screen readers
 
 ## 📍 Localizações Atualizadas:
 
 ### 1. Catálogo Principal (`App.tsx`)
 ```jsx
 <Link to="/" className="flex items-center gap-2">
-  <img src={logoWellshop} alt="WellShop" className="w-8 h-8 object-contain" />
-  <h1 className="text-2xl font-bold text-[#374151]">WellShop</h1>
+  <img src={logoUniShopBr} alt="UniShopBr" className="w-8 h-8 object-contain" />
+  <h1 className="text-2xl font-bold text-[#374151]">UniShopBr</h1>
 </Link>
 ```
 
 ### 2. Painel Admin (`AdminPanel.tsx`)
 ```jsx
 <div className="flex items-center gap-2">
-  <img src={logoWellshop} alt="WellShop" className="w-8 h-8 object-contain" />
+  <img src={logoUniShopBr} alt="UniShopBr" className="w-8 h-8 object-contain" />
   <h1 className="text-xl font-bold text-[#374151]">Painel Admin</h1>
 </div>
 ```
@@ -73,4 +73,4 @@ import logoWellshop from './assets/logo_wellshop.png'
 - ✅ Layout mantido intacto
 
 ## 🎉 Resultado Final:
-A logo WellShop agora está presente em ambos os headers, mantendo o tamanho original e a experiência visual consistente em todo o aplicativo!
+A logo UniShopBr agora está presente em ambos os headers, mantendo o tamanho original e a experiência visual consistente em todo o aplicativo!

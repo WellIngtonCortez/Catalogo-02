@@ -1,7 +1,7 @@
 -- Criar usuário administrador
 -- Execute este comando no SQL Editor do Supabase para criar um usuário admin
 
--- Substitua 'admin@wellshop.com' e 'senha_segura_123' com suas credenciais reais
+-- Substitua 'admin@unishopbr.com' e 'senha_segura_123' com suas credenciais reais
 insert into auth.users (
   id,
   email,

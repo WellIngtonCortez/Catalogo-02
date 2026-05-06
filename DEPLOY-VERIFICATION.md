@@ -1,4 +1,4 @@
-# 🔍 Deploy Verification Guide - WellShop
+# 🔍 Deploy Verification Guide - UniShopBr
 
 ## ✅ Build Verification Checklist
 
@@ -77,7 +77,7 @@ npm run deploy
 ## 🔍 Post-Deploy Verification
 
 ### ✅ Functional Tests
-1. **Homepage Loads**: `https://catalago-wellshop.vercel.app`
+1. **Homepage Loads**: `https://catalago-unishopbr.vercel.app`
 2. **Routing Works**: `/product/test`, `/admin/login`
 3. **Favicon Appears**: Verificar aba do navegador
 4. **Assets Load**: CSS, JS, imagens
