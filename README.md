@@ -1,8 +1,8 @@
-# 🛍️ WellShop - Catálogo Premium
+# 🛍️ UniShopBr - Catálogo Premium
 
 <div align="center">
 
-![WellShop Logo](public/favicon.svg)
+![UniShopbrr Logo](public/splash.png)
 
 **Catálogo de produtos afiliados moderno e conversão-focused**
 
