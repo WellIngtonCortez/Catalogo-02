@@ -12,14 +12,11 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false, // Desabilitar sourcemap em produção
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          supabase: ['@supabase/supabase-js']
-        }
+        manualChunks: undefined // Desabilitar chunks manuais temporariamente para simplificar build
       }
     }
   },
