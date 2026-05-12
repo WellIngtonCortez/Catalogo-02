@@ -9,7 +9,7 @@ import { formatPrice, parsePrice } from '../utils/format'
 import { ShoppingBag, Edit, Trash2, BarChart3, LogOut, Plus, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { LojaSelector } from '../components/admin/LojaSelector'
-import logoUniShopBr from '../assets/logo_unishopbr.png'
+// import logoUniShopBr from '../assets/logo_unishopbr.png'
 
 import logoSplash from '../assets/logo-splash.png'
 
@@ -193,7 +193,8 @@ export function AdminPanel() {
 
       // ─── LAYER 2: Seletores Específicos por Domínio (Regex no HTML) ─────────────
       const lowerUrl = url.toLowerCase()
-      let domainPrice = '', domainOriginalPrice = '', domainRating = '', domainReviewCount = ''
+      let domainPrice = '', domainRating = '', domainReviewCount = ''
+      const domainOriginalPrice = ''
 
       if (lowerUrl.includes('amazon')) {
         // Amazon: .a-price-whole | .a-price-fraction
@@ -268,10 +269,10 @@ export function AdminPanel() {
       const finalReviewRaw    = ldReviewCount || domainReviewCount || reviewCountFromRegex()
 
       // Normaliza rating 0-5 (fallback inteligente: 5.0)
-      let finalRating = finalRatingRaw ? String(Math.min(parseFloat(finalRatingRaw), 5)) : '5.0'
+      const finalRating = finalRatingRaw ? String(Math.min(parseFloat(finalRatingRaw), 5)) : '5.0'
 
       // Nº de avaliações mínimo de 100 como fallback
-      let finalReviewCount = finalReviewRaw || '100'
+      const finalReviewCount = finalReviewRaw || '100'
 
       // Título com validação anti-placeholder
       let title = ml.title || ''

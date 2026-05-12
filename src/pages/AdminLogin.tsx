@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabase'
-import { ShoppingBag, Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 
 import logoSplash from '../assets/logo-splash.png'
