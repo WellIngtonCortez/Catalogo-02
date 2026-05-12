@@ -3,15 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://api.microlink.io wss://*.supabase.co;" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/favicon.png" />
-  <link rel="apple-touch-startup-image" href="/logo-splash.png" />
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://api.microlink.io wss://*.supabase.co;" />
+  <link rel="icon" type="image/png" href="/src/assets/icone.png" />
+  <link rel="apple-touch-icon" href="/src/assets/iconetouct.png" />
+  <link rel="apple-touch-startup-image" href="/src/assets/logo-splash.png" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#F27121" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="UniShopBr — As melhores ofertas da Shopee, Amazon, Mercado Livre e AliExpress em um só lugar." />
-  <title>UniShopBr — Catálogo Premium</title>
+  <meta name="description"
+    content="UniShopBr — As melhores ofertas da Shopee, Amazon, Mercado Livre e AliExpress em um só lugar." />
+  <title>UniShopBr</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -31,15 +33,28 @@
       z-index: 9999;
       transition: opacity 0.5s ease-out;
     }
+
     #splash-screen img {
       width: 180px;
       height: auto;
       animation: pulse 2s infinite ease-in-out;
     }
+
     @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.8; }
+      0% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.05);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
     }
   </style>
 </head>
